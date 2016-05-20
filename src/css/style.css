@@ -1,7 +1,66 @@
+@import url(https://fonts.googleapis.com/css?family=Lato);
+
 body{
-	background: #f5f5f5;
+	margin: 15px;
+	margin-top: 0;
+	font-family: Lato,Arial;
+	color: rgba(0,0,0,.87);
+	padding-top: 50px;
 }
 .wrapper{
-	padding: 50px 25px;
+	width: 100%;
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 25px;
+	margin-top: 15px;
+	box-sizing: border-box;
+	background: #f5f5f5;
+	box-shadow: 0 1px 5px 0 rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.12);
+}
+.wrapper > div{
+	display: block;
 	text-align: center;
+	padding: 25px 0;
+}
+.ripple-cont.teal{
+	background: #009688;
+}
+.header{
+	position:fixed;
+	text-align: left;
+	width: 100%;
+	height: 50px;
+	top: 0;
+	left: 0;
+	padding: 0 15px;
+	box-sizing: border-box;
+	background-color: #fff;
+	z-index: 99;
+	box-shadow: 0 0 0 rgba(0,0,0,0);
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    transition: all .4s;
+}
+.header.scrolled{
+	box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 0px 2px 2px rgba(0, 0, 0, 0.098), 0px 0px 5px 1px rgba(0, 0, 0, 0.084);
+}
+.header-content{
+	width: 100%;
+	max-width: 1000px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.header:after{
+	content: '';
+	display: table;
+	clear: both;
+}
+.header h2{
+	display: inline-block;
+	margin: 0;
+}
+.github-link{
+	margin-left: auto;
 }

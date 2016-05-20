@@ -1,18 +1,72 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title></title>
-		<link rel="stylesheet" type="text/css" href="src/css/style.css">
+		<title>ng-ripple | Material ripple effects for angularjs</title>
 		<link rel="stylesheet" type="text/css" href="src/css/ng-ripple.css">
+		<link rel="stylesheet" type="text/css" href="src/css/style.css">
 	</head>
-	<body ng-app="ng-ripple">
+	<body ng-app="app">
+		<div class="header">
+			<div class="header-content">
+				<h2>ng-ripple</h2>
+				<a class="ripple r-round r-icon github-link" r-opacity=".2" href="https://github.com/exodusanto/ng-ripple">
+					<img src="src/img/materials_github.png" height="25">
+				</a>
+			</div>
+		</div>
 		<div class="wrapper">
-			<ripple>
-				test
-			</ripple>
+			<h3>FLAT</h3>
+			<div>
+				<ripple>
+					Button
+				</ripple>
+			</div>
+			<div>
+				<ripple r-disabled>
+					Ripple-Disabled
+				</ripple>
+			</div>
+			<div>
+				<ripple class="disabled">
+					Disabled
+				</ripple>
+			</div>
+		</div>
+		<div class="wrapper">
+			<h3>RAISED</h3>
+			<div>
+				<a class="ripple r-raised" href="#">
+					Link
+				</a>
+			</div>
+			<div>
+				<ripple class="r-raised teal" r-light>
+					Light
+				</ripple>
+			</div>
+			<div>
+				<ripple class="r-raised" r-color="#F44336" r-opacity=".6">
+					Custom
+				</ripple>
+			</div>
+			<div>
+				<ripple class="disabled r-raised">
+					Disabled
+				</ripple>
+			</div>
 		</div>
 		<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
 		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
 		<script type="text/javascript" src="src/js/ng-ripple.js"></script>
+		<script type="text/javascript" src="src/js/app.js"></script>
+		<script>
+			$(window).scroll(function(){
+				if($(this).scrollTop() > $(".header").height()){
+					$(".header").addClass('scrolled');
+				}else{
+					$(".header").removeClass('scrolled');
+				}
+			})
+		</script>
 	</body>
 </html>
