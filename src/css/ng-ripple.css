@@ -1,0 +1,68 @@
+.ripple-cont{
+	position: relative;
+	display: inline-block;
+	border-radius: 2px;
+	min-height: 36px;
+	line-height: 36px;
+	min-width: 88px;
+	text-transform: uppercase;
+	font-family: Lato,Arial;
+	background-color: transparent;
+	cursor: pointer;
+	margin: 0;
+	padding: 0 6px;
+	border: 0;
+	outline: 0;
+	font-size: 1em;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+
+	transition: all .3s;
+}
+.ripple-cont:hover{
+	background-color: rgba(158,158,158,0.2);
+}
+.ripple-cont:active{
+	background-color: rgba(158,158,158,0.3);
+}
+.ripple-cont .ink-content{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-clip: padding-box;
+	overflow: hidden;
+	-moz-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
+	-o-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
+	-webkit-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
+	mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
+	border-radius: 2px;
+}
+.ink-content .ink {
+	display: block; position: absolute;
+	background: rgb(0,0,0);
+	border-radius: 100%;
+	z-index: 10;
+	opacity: 0;
+    -webkit-transform: translate(-50%,-50%) scale(0);
+    -moz-transform: translate(-50%,-50%) scale(0);
+    transform: translate(-50%,-50%) scale(0);
+}
+.ink-content .ink.animate {
+    -webkit-transform: translate(-50%,-50%) scale(1);
+    -moz-transform: translate(-50%,-50%) scale(1);
+    transform: translate(-50%,-50%) scale(1);
+    -webkit-transition: all .55s cubic-bezier(0.25, 0.8, 0.25, 1);
+    -moz-transition: all .55s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all .55s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+@-webkit-keyframes ripple {
+    100% {opacity: 0; -webkit-transform: scale(2.5);}
+}
+@-moz-keyframes ripple {
+    100% {opacity: 0; -moz-transform: scale(2.5);}
+}
+@keyframes ripple {
+    100% {opacity: 0; transform: scale(2.5);}
+}
