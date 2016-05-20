@@ -1,6 +1,8 @@
 # ng-ripple
 
-Material ripple effects directive for AngularJS
+Material ripple effects directive for AngularJS,
+Inspired by **Angular Material Design** , 
+this implementation contains the ripple animation for buttons and links
 ### Version
 0.5.0
 
@@ -40,7 +42,12 @@ Add material button with **box-shadow**:
 ```
 **Disabled ripple**
 ``` html
-<ripple class="r-disabled"></ripple>
+<ripple r-disabled></ripple>
+```
+
+or **Disabled hover** and **active**
+``` html
+<ripple clas="r-int-disabled"></ripple>
 ```
 or **Disabled** all **element**:
 ``` html

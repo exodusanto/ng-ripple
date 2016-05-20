@@ -29,10 +29,10 @@
 	transition: all .3s;
 }
 
-.ripple-cont:hover{
+.ripple-cont:not(.r-int-disabled):hover{
 	background-color: rgba(158,158,158,0.2);
 }
-.ripple-cont:active{
+.ripple-cont:not(.r-int-disabled):active{
 	background-color: rgba(158,158,158,0.3);
 }
 .ripple-cont.r-icon{
@@ -47,7 +47,7 @@
 	background-color: #fff;
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 }
-.ripple-cont.r-raised:active{
+.ripple-cont.r-raised:not(.r-int-disabled):active{
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,.4);
 }
 
