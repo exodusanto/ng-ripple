@@ -4,11 +4,12 @@ Material ripple effects directive for AngularJS,
 Inspired by **Angular Material Design** , 
 this implementation contains the ripple animation for buttons and links
 ### Version
-0.5.1
+0.9.0
 
 ### Dependencies
  - AngularJs
- - jQuery (soon version without)
+
+You can also use **jQuery** version
 
 ## Installation
 **NPM**
@@ -35,6 +36,18 @@ or with **Class**:
 
 ``` html
 <a href="#" class="ripple"></ripple>
+```
+
+or with **Attibute**:
+
+
+``` html
+<a href="#" data-ripple></ripple>
+```
+or
+
+``` html
+<a href="#" ripple></ripple>
 ```
 
 Add material button with **box-shadow**:
@@ -93,6 +106,10 @@ For all element
 This is the incremental percentage of ripple radius (2 => 200% )
 
 ## Changelog
+
+Version 0.9.0:
+
+Add **standalone version**.
 
 Version 0.5.1:
 

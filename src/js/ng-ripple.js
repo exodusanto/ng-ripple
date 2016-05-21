@@ -1,9 +1,9 @@
-/*
+/*!
 * Author: Antonio Dal Sie
 * Name: ng-ripple
 * Description: Material ripple effects for angularjs
 */
-(function($,exports){
+(function(exports){
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .35,
@@ -20,63 +20,65 @@
 			var customOpacity = null;
 			var icon = false;
 			
-			elem = $(element);
-			rippleCont = elem.find(".ink-content");
+			elem = element[0];
+			rippleCont = elem.querySelectorAll(".ink-content")[0];
 
 			element.on("$destroy",function(){
-				elem.unbind('mousedown',createRipple);
+				elem.removeEventListener('mousedown',createRipple);
 			});
 
-			icon = elem.hasClass('r-icon');
+			icon = hasClass(elem,'r-icon');
 			inkLight = typeof attributes.rLight !== "undefined";
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 
-			if(typeof attributes.rDisabled == "undefined" && !elem.hasClass('disabled')){
-				elem.bind('mousedown',createRipple);
+			if(typeof attributes.rDisabled == "undefined" && !hasClass(elem,'disabled')){
+				elem.addEventListener('mousedown',createRipple);
 			}
 
 
 			function createRipple(event){
-				var ink = $("<i class='ink'></i>");
+				var ink = document.createElement("i");
 				var incr = 0;
 
-				rippleCont.prepend(ink);
+				addClass(ink,'ink');
+
+				rippleCont.insertBefore(ink,rippleCont.firstChild);
 				
-				var d = Math.max(rippleCont.outerWidth(), rippleCont.outerHeight());
+				var d = Math.max(rippleCont.offsetWidth, rippleCont.offsetHeight);
 				
-				ink.css({height: d/2, width: d/2});
+				ink.style.height = d/2;
+				ink.style.width = d/2;
 				
 				
-				var x = event.pageX - rippleCont.offset().left;
-				var y = event.pageY - rippleCont.offset().top;
+				var x = event.pageX - offestElm(rippleCont).left;
+				var y = event.pageY - offestElm(rippleCont).top;
 				
 				
 				if(!icon){
-					ink.css({top: y+'px', left: x+'px'});
+					ink.style.top = y+'px';
+					ink.style.left = x+'px';
 				}
 
-				ink.css("opacity",0);
+				ink.style.opacity = 0;
 
 				if(!!inkColor){
-					ink.css("background-color",inkColor);
+					ink.style.backgroundColor = inkColor;
 				}else if(!!inkLight){
-					ink.css("background-color","rgb(255,255,255)");
+					ink.style.backgroundColor = "rgb(255,255,255)";
 				}
 
-				ink.addClass('animate');
+				addClass(ink,'animate');
 
 				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
 
-				ink.css({
-					height: d*incr,
-					width: d*incr
-				});
+				ink.style.height = d*incr+"px";
+				ink.style.width = d*incr+"px";
 
 
 				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
 
-				ink.css({opacity: inkOpacity});
+				ink.style.opacity = inkOpacity;
 				
 				var inkGrow = null;
 
@@ -85,10 +87,8 @@
 						inkGrow = setInterval(function(){
 							if(incr <= 2.5){
 								incr += .2;
-								ink.css({
-									height: d*incr,
-									width: d*incr
-								});
+								ink.style.height = d*incr+"px";
+								ink.style.width = d*incr+"px";
 							}else{
 								clearInterval(inkGrow);
 							}
@@ -97,15 +97,15 @@
 				}
 				
 				function removeInk(){
-					$(window).bind('mouseup mouseleave blur',function(){
-						$(this).unbind();
+					addListenerMulti(window,'mouseup mouseleave blur',function(){
+						removeListenerMulti(this,'mouseup mouseleave blur',this);
 
 						clearInterval(inkGrow);
 
 						setTimeout(function(){
-							ink.css({
-								opacity:0
-							});
+
+							ink.style.opacity = 0;
+
 							setTimeout(function(){
 								ink.remove();
 							},550);
@@ -118,25 +118,66 @@
 			}
 		}
 
+		function addClass(e,name){
+			if (e.classList){
+			  e.classList.add(name);
+			}else{
+			  e.className += ' ' + name;
+			}
+		}
+
+		function hasClass(e,name){
+			if (e.classList){
+			  e.classList.contains(name);
+			}else{
+			  new RegExp('(^| )' + name + '( |$)', 'gi').test(e.className);
+			}
+		}
+
+		function offestElm(el){
+			var rect = el.getBoundingClientRect();
+
+			return{
+			  top: rect.top + document.body.scrollTop,
+			  left: rect.left + document.body.scrollLeft
+			}
+		}
+
+		function addListenerMulti(el, s, fn) {
+		  var evts = s.split(' ');
+		  for (var i=0, iLen=evts.length; i<iLen; i++) {
+		    el.addEventListener(evts[i], fn, false);
+		  }
+		}
+
+		function removeListenerMulti(el, s, fn) {
+		  var evts = s.split(' ');
+		  for (var i=0, iLen=evts.length; i<iLen; i++) {
+		    el.removeEventListener(evts[i], fn, false);
+		  }
+		}
+
 
 		function createMarkup(element){
-			var content = $(element).html();
-			var markup = $("<button></button>");
+			var content = element[0].innerHTML;
+			var markup = document.createElement("button");
+			if(element.prop('nodeName').toLowerCase() != "ripple"){
+				var cloneElement = element[0].cloneNode(true);
+				cloneElement.innerHTML = '';
+				cloneElement.className = cloneElement.className.replace(/\b(ripple)(\s)*\b/,'');
 
-			if($(element).prop('nodeName').toLowerCase() != "ripple"){
-				var cloneElement = $(element).clone();
-				$(cloneElement).removeClass('ripple');
-				$(cloneElement).attr('ripple');
-				$(cloneElement).empty();
-				markup = $(cloneElement);
+				cloneElement.removeAttribute("ripple");
+				cloneElement.removeAttribute("data-ripple");
+
+				markup = cloneElement;
 			}
 
-			markup.addClass('ripple-cont');
+			addClass(markup,'ripple-cont');
 
-			markup.append("<span class='ripple-content'>"+content+"</span>");
-			markup.append("<div class='ink-content'></div>");
+			markup.innerHTML += "<span class='ripple-content'>"+content+"</span>";
+			markup.innerHTML += "<div class='ink-content'></div>";
 			
-			return markup[0].outerHTML;
+			return markup.outerHTML;
 		}
 
 		return {
@@ -146,4 +187,4 @@
 			replace: true
 		}
 	}]);
-})(jQuery,window);
+})(window);
