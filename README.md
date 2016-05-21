@@ -106,6 +106,9 @@ For all element
 This is the incremental percentage of ripple radius (2 => 200% )
 
 ## Changelog
+Version 0.9.1:
+
+Fix disabled option.
 
 Version 0.9.0:
 

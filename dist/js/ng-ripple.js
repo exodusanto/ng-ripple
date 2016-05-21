@@ -32,6 +32,8 @@
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 
+			console.log(elem,!hasClass(elem,'disabled'));
+
 			if(typeof attributes.rDisabled == "undefined" && !hasClass(elem,'disabled')){
 				elem.addEventListener('mousedown',createRipple);
 			}
@@ -128,9 +130,9 @@
 
 		function hasClass(e,name){
 			if (e.classList){
-			  e.classList.contains(name);
+			  return e.classList.contains(name);
 			}else{
-			  new RegExp('(^| )' + name + '( |$)', 'gi').test(e.className);
+			  return new RegExp('(^| )' + name + '( |$)', 'gi').test(e.className);
 			}
 		}
 

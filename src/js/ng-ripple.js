@@ -128,9 +128,9 @@
 
 		function hasClass(e,name){
 			if (e.classList){
-			  e.classList.contains(name);
+			  return e.classList.contains(name);
 			}else{
-			  new RegExp('(^| )' + name + '( |$)', 'gi').test(e.className);
+			  return new RegExp('(^| )' + name + '( |$)', 'gi').test(e.className);
 			}
 		}
 
