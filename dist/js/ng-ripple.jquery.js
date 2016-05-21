@@ -21,10 +21,11 @@
 			var icon = false;
 			
 			elem = $(element);
+			elem.removeClass('ripple');
 			rippleCont = elem.find(".ink-content");
 
 			element.on("$destroy",function(){
-				elem.unbind('mousedown',createRipple);
+				elem.unbind('mousedown touchstart',createRipple);
 			});
 
 			icon = elem.hasClass('r-icon');
@@ -33,7 +34,7 @@
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 
 			if(typeof attributes.rDisabled == "undefined" && !elem.hasClass('disabled')){
-				elem.bind('mousedown',createRipple);
+				elem.bind('mousedown touchstart',createRipple);
 			}
 
 
@@ -97,7 +98,7 @@
 				}
 				
 				function removeInk(){
-					$(window).bind('mouseup mouseleave blur',function(){
+					$(window).bind('mouseup mouseleave blur touchend',function(){
 						$(this).unbind();
 
 						clearInterval(inkGrow);
@@ -126,6 +127,7 @@
 			if($(element).prop('nodeName').toLowerCase() != "ripple"){
 				var cloneElement = $(element).clone();
 				$(cloneElement).empty();
+				cloneElement[0].className = "";
 				$(cloneElement).removeClass('ripple');
 				$(cloneElement).removeAttr('ripple');
 				$(cloneElement).removeAttr('data-ripple')
@@ -135,9 +137,9 @@
 
 			markup.addClass('ripple-cont');
 
-			markup.append("<span class='ripple-content'>"+content+"</span>");
+			markup.append("<div class='ripple-content'>"+content+"</div>");
 			markup.append("<div class='ink-content'></div>");
-			
+			console.log(markup[0].outerHTML);
 			return markup[0].outerHTML;
 		}
 

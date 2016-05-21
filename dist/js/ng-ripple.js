@@ -32,8 +32,6 @@
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 
-			console.log(elem,!hasClass(elem,'disabled'));
-
 			if(typeof attributes.rDisabled == "undefined" && !hasClass(elem,'disabled')){
 				elem.addEventListener('mousedown',createRipple);
 			}
