@@ -5,6 +5,18 @@ concat    = require('gulp-concat');
 
 gulp.task("js",function(){
   return gulp.src("src/js/ng-ripple.js")
+  .pipe(concat('ng-ripple.js'))
+  .pipe(gulp.dest("dist/js"));
+});
+
+gulp.task("css",function(){
+  return gulp.src("src/css/ng-ripple.css")
+  .pipe(concat('ng-ripple.css'))
+  .pipe(gulp.dest("dist/css"));
+});
+
+gulp.task("js:min",function(){
+  return gulp.src("src/js/ng-ripple.js")
   .pipe(concat('ng-ripple.min.js'))
   .pipe(uglify({
     preserveComments: "some"
@@ -12,11 +24,11 @@ gulp.task("js",function(){
   .pipe(gulp.dest("dist/js"));
 });
 
-gulp.task("css",function(){
+gulp.task("css:min",function(){
   return gulp.src("src/css/ng-ripple.css")
   .pipe(concat('ng-ripple.min.css'))
   .pipe(minifyCss())
   .pipe(gulp.dest("dist/css"));
 });
 
-gulp.task("default",["js","css"]);
+gulp.task("default",["js","js:min","css","css:min"]);

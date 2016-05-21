@@ -24,6 +24,17 @@ body{
 }
 .ripple-cont.teal{
 	background: #009688;
+	color: #fff;
+}
+.ripple-cont.r-raised.teal:hover{
+	background: #00897B;
+}
+.ripple-cont.red{
+	background: #E57373;
+	color: #fff;
+}
+.ripple-cont.red:hover{
+	background: #EF5350;
 }
 .header{
 	position:fixed;

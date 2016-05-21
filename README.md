@@ -4,13 +4,18 @@ Material ripple effects directive for AngularJS,
 Inspired by **Angular Material Design** , 
 this implementation contains the ripple animation for buttons and links
 ### Version
-0.5.0
+0.5.1
 
 ### Dependencies
  - AngularJs
  - jQuery (soon version without)
 
 ## Installation
+**NPM**
+```sh
+$ npm install ng-ripple
+```
+or **Bower**
 ```sh
 $ bower install ngRipple
 ```
@@ -40,6 +45,10 @@ Add material button with **box-shadow**:
 ``` html
 <ripple class="r-icon"></ripple>
 ```
+**Fab** element:
+``` html
+<ripple class="r-round r-raised"></ripple>
+```
 **Disabled ripple**
 ``` html
 <ripple r-disabled></ripple>
@@ -53,6 +62,11 @@ or **Disabled** all **element**:
 ``` html
 <ripple class="disabled"></ripple>
 ```
+Custom **light color**
+``` html
+<ripple r-light></ripple>
+```
+
 Custom **ripple color**
 ``` html
 <ripple r-color="#fff"></ripple>
@@ -77,3 +91,9 @@ For all element
 **Ripple Incremental** (rippleIncremental):
 
 This is the incremental percentage of ripple radius (2 => 200% )
+
+## Changelog
+
+Version 0.5.1:
+
+Add **Fab** option.

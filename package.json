@@ -1,14 +1,24 @@
 {
   "name": "ng-ripple",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Ripple effects for angular",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "dist/js/ng-ripple.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exodusanto/ng-ripple"
   },
+  "keywords": [
+    "angular",
+    "ripple",
+    "material button",
+    "matrial effects"
+  ],
   "author": "Antonio Dal Sie",
+  "readmeFilename": "README.md",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
+    "angular": "^1.4.7",
+    "jquery": "^2.1.4",
     "bower": "^1.7.9",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
