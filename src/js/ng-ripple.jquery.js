@@ -139,7 +139,6 @@
 
 			markup.append("<div class='ripple-content'>"+content+"</div>");
 			markup.append("<div class='ink-content'></div>");
-			console.log(markup[0].outerHTML);
 			return markup[0].outerHTML;
 		}
 

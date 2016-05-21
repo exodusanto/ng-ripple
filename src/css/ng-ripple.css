@@ -1,3 +1,8 @@
+/*!
+* Author: Antonio Dal Sie
+* Name: ng-ripple
+* Description: Material ripple effects for angularjs
+*/
 .ripple-cont{
 	position: relative;
 	display: inline-block;
@@ -33,10 +38,10 @@
 	transition: all .3s;
 }
 
-.ripple-cont:not(.r-int-disabled):hover{
+.ripple-cont:not(.r-int-disabled,.disabled):hover{
 	background-color: rgba(158,158,158,0.2);
 }
-.ripple-cont:not(.r-int-disabled):active{
+.ripple-cont:not(.r-int-disabled,.disabled):active{
 	background-color: rgba(158,158,158,0.3);
 }
 
@@ -89,7 +94,7 @@
 	z-index: 1;
 	width: 100%;
 	background-clip: padding-box;
-	overflow: hidden;
+	/* overflow: hidden; */
 	-moz-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
 	-o-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
 	-webkit-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
@@ -102,9 +107,9 @@
 	border-radius: 100%;
 	z-index: 10;
 	opacity: 0;
-    -webkit-transform: translate(-50%,-50%) scale(0);
-    -moz-transform: translate(-50%,-50%) scale(0);
-    transform: translate(-50%,-50%) scale(0);
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
 }
 .ripple-cont.r-icon .ink{
 	top: 50%;
