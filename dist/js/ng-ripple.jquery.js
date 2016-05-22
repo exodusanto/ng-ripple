@@ -60,9 +60,14 @@
 				
 				ink.css({height: d/2, width: d/2});
 				
-				
-				var x = event.pageX - rippleCont.offset().left;
-				var y = event.pageY - rippleCont.offset().top;
+
+				var x = event.type != "touchstart" ? 
+					event.pageX - rippleCont.offset().left : 
+					event.originalEvent.touches[0].pageX - rippleCont.offset().left;
+
+				var y = event.type != "touchstart" ? 
+					event.pageY - rippleCont.offset().top :
+					event.originalEvent.touches[0].pageY - rippleCont.offset().top;
 				
 				
 				if(!icon){
