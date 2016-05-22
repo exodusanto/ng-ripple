@@ -31,7 +31,6 @@
 
 			icon = elem.hasClass('r-icon');
 			overInk = elem.hasClass('r-overink');
-			overInk = typeof attributes.rOverink !== "undefined";
 			inkLight = typeof attributes.rLight !== "undefined";
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
