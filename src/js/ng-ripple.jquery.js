@@ -7,7 +7,7 @@
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .35,
-		'rippleIncremental': 2
+		'rippleIncremental': 1.27
 	});
 
 	ripple.directive('ripple',['rippleConfig', function(rippleConfig){
@@ -19,6 +19,7 @@
 			var inkColor = false;
 			var customOpacity = null;
 			var icon = false;
+			var overInk = false;
 			
 			elem = $(element);
 			elem.removeClass('ripple');
@@ -29,9 +30,12 @@
 			});
 
 			icon = elem.hasClass('r-icon');
+			overInk = elem.hasClass('r-overink');
+			overInk = typeof attributes.rOverink !== "undefined";
 			inkLight = typeof attributes.rLight !== "undefined";
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
+
 
 			if(typeof attributes.rDisabled == "undefined" && !elem.hasClass('disabled')){
 				elem.bind('mousedown touchstart',createRipple);
@@ -39,6 +43,14 @@
 
 
 			function createRipple(event){
+
+				var targetInk = $(event.target);
+
+				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
+				if(event.type == "mousedown" && event.which !== 1)return; // prevent other button
+
+				if(!!overInk)rippleCont.show(0);
+
 				var ink = $("<i class='ink'></i>");
 				var incr = 0;
 
@@ -82,40 +94,46 @@
 				var inkGrow = null;
 
 				function hoverIncrement(){
-					inkGrow = setTimeout(function(){
-						inkGrow = setInterval(function(){
-							if(incr <= 2.5){
-								incr += .2;
-								ink.css({
-									height: d*incr,
-									width: d*incr
-								});
-							}else{
-								clearInterval(inkGrow);
-							}
-						},50);
-					},100);
+					
+					inkGrow = setInterval(function(){
+						if(incr <= 3){
+							incr += .2;
+							ink.css({
+								height: d*incr,
+								width: d*incr
+							});
+						}else{
+							clearInterval(inkGrow);
+						}
+					},50);
 				}
 				
+				function listenerPress(){
+					$(window).bind('mouseup mouseleave blur touchend', removeInk);
+				}
+
 				function removeInk(){
-					$(window).bind('mouseup mouseleave blur touchend',function(){
-						$(this).unbind();
+					$(window).unbind('mouseup mouseleave blur touchend', this);
 
-						clearInterval(inkGrow);
+					clearInterval(inkGrow);
 
-						setTimeout(function(){
+					var delay = incr < 2 && elem.prop('nodeName').toLowerCase() == 'a' ? 100 : 1;
+					incr = incr < 2 ? 2 : incr += .5;
+					setTimeout(function(){
 							ink.css({
-								opacity:0
-							});
-							setTimeout(function(){
-								ink.remove();
-							},550);
-						},100);
-					});
+							height: d*incr,
+							width: d*incr,
+							opacity:0
+						});
+						setTimeout(function(){
+							ink.remove();
+							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
+						},650);
+					},delay);
 				}
 
 				hoverIncrement();
-				removeInk();
+				listenerPress();
 			}
 		}
 

@@ -4,7 +4,7 @@ Material ripple effects directive for AngularJS,
 Inspired by **Angular Material Design** , 
 this implementation contains the ripple animation for buttons and links
 ### Version
-0.9.1
+0.9.4
 
 ### Dependencies
  - AngularJs
@@ -89,6 +89,23 @@ Custom **ripple opacity**
 <ripple r-opacity="#f00"></ripple>
 ```
 
+Ripple in-front (overink)
+``` html
+<ripple class="r-overink"></ripple>
+```
+
+Prevent ink for specific element and children
+``` html
+<ripple>
+	<div class="r-noink">
+		I hate ink
+	</div>
+	<div>
+		I love ink
+	</div>
+</ripple>
+```
+
 ## Angular Options
 ``` js
     app.run(['rippleConfig', function(rippleConfig){
@@ -106,6 +123,14 @@ For all element
 This is the incremental percentage of ripple radius (2 => 200% )
 
 ## Changelog
+Version 0.9.4:
+
+Added **r-overink** for big element, added **r-noink** (prevent ink generation when you click a specific element)
+
+Version 0.9.3:
+
+Fix overflow ink problem
+
 Version 0.9.1:
 
 Fix disabled option.
