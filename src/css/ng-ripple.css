@@ -18,6 +18,8 @@
 	padding: 0 6px;
 	border: 0;
 	outline: 0;
+	overflow:hidden;
+	vertical-align: top;
 	font-size: 1em;
 	box-sizing: border-box;
 	-webkit-appearance: none;
@@ -39,10 +41,10 @@
 	transition: all .3s;
 }
 
-.ripple-cont:not(.disabled):not(.r-icon):hover{
+.ripple-cont:hover{
 	background-color: rgba(158,158,158,0.2);
 }
-.ripple-cont:not(.disabled):not(.r-icon):active{
+.ripple-cont:active{
 	background-color: rgba(158,158,158,0.3);
 }
 
@@ -64,6 +66,13 @@
 	background-color: transparent;
 }
 
+.ripple-cont.r-icon:hover{
+	background-color: transparent;
+}
+.ripple-cont.r-icon:active{
+	background-color: transparent;
+}
+
 .ripple-cont.r-raised{
 	background-color: #fff;
 	box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
@@ -79,8 +88,14 @@
 .ripple-cont.disabled{
 	color: rgba(0,0,0,0.26) !important;
     cursor: default;
-	background: transparent;
+	background-color: transparent;
 	box-shadow: none;
+}
+.ripple-cont.disabled:hover{
+	background-color: transparent;
+}
+.ripple-cont.disabled:active{
+	background-color: transparent;
 }
 .ripple-cont.r-raised.disabled{    
 	background-color: rgba(0,0,0,0.12) !important;
