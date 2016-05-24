@@ -115,12 +115,14 @@
 	z-index: 1;
 	width: 100%;
 	background-clip: padding-box;
+	background-color: transparent;
 	/* overflow: hidden; */
 	-moz-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
 	-o-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
 	-webkit-mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
 	mask-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC");
 	border-radius: 2px;
+	transition: all 550ms cubic-bezier(0.25, 0.8, 0.25, 1) 0ms;
 }
 .ripple-cont.r-overink .ink-content{
 	display: none;
@@ -135,6 +137,9 @@
     -webkit-transform: translate(-50%,-50%);
     -moz-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
 }
 .ripple-cont.r-icon .ink{
 	top: 50%;
@@ -144,7 +149,7 @@
     -webkit-transform: translate(-50%,-50%) scale(1);
     -moz-transform: translate(-50%,-50%) scale(1);
     transform: translate(-50%,-50%) scale(1);
-    -webkit-transition: margin .65s cubic-bezier(.25,.8,.25,1),border .65s cubic-bezier(.25,.8,.25,1),width .65s cubic-bezier(.25,.8,.25,1),height .65s cubic-bezier(.25,.8,.25,1),opacity .65s cubic-bezier(.25,.8,.25,1),transform .65s cubic-bezier(.25,.8,.25,1);
-   	-moz-transition: margin .65s cubic-bezier(.25,.8,.25,1),border .65s cubic-bezier(.25,.8,.25,1),width .65s cubic-bezier(.25,.8,.25,1),height .65s cubic-bezier(.25,.8,.25,1),opacity .65s cubic-bezier(.25,.8,.25,1),transform .65s cubic-bezier(.25,.8,.25,1);
-    transition: margin .65s cubic-bezier(.25,.8,.25,1),border .65s cubic-bezier(.25,.8,.25,1),width .65s cubic-bezier(.25,.8,.25,1),height .65s cubic-bezier(.25,.8,.25,1),opacity .65s cubic-bezier(.25,.8,.25,1),transform .65s cubic-bezier(.25,.8,.25,1);
+    -webkit-transition: margin .9s cubic-bezier(.25,.8,.25,1),border .9s cubic-bezier(.25,.8,.25,1),width .9s cubic-bezier(.25,.8,.25,1),height .9s cubic-bezier(.25,.8,.25,1),opacity .9s cubic-bezier(.25,.8,.25,1),transform .9s cubic-bezier(.25,.8,.25,1);
+   	-moz-transition: margin .9s cubic-bezier(.25,.8,.25,1),border .9s cubic-bezier(.25,.8,.25,1),width .9s cubic-bezier(.25,.8,.25,1),height .9s cubic-bezier(.25,.8,.25,1),opacity .9s cubic-bezier(.25,.8,.25,1),transform .9s cubic-bezier(.25,.8,.25,1);
+    transition: margin .9s cubic-bezier(.25,.8,.25,1),border .9s cubic-bezier(.25,.8,.25,1),width .9s cubic-bezier(.25,.8,.25,1),height .9s cubic-bezier(.25,.8,.25,1),opacity .9s cubic-bezier(.25,.8,.25,1),transform .9s cubic-bezier(.25,.8,.25,1);
 }

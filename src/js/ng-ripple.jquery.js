@@ -46,12 +46,14 @@
 				var targetInk = $(event.target);
 
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
-				if(event.type == "mousedown" && event.which !== 1)return; // prevent other button
 
 				if(!!overInk)rippleCont.show(0);
 
 				var ink = $("<i class='ink'></i>");
 				var incr = 0;
+
+				rippleCont.find(".ink").removeClass('new');
+				ink.addClass('new');
 
 				rippleCont.prepend(ink);
 				
@@ -74,11 +76,18 @@
 				}
 
 				ink.css("opacity",0);
+				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
+				
+				rippleCont.css("background-color",'rgba(0,0,0,'+.098+')');
 
 				if(!!inkColor){
 					ink.css("background-color",inkColor);
+
+					var rgba = hexToRGB(inkColor);
+					rippleCont.css("background-color",'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')')
 				}else if(!!inkLight){
 					ink.css("background-color","rgb(255,255,255)");
+					rippleCont.css("background-color",'rgba(255,255,255,'+.098+')');
 				}
 
 				ink.addClass('animate');
@@ -91,7 +100,6 @@
 				});
 
 
-				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
 
 				ink.css({opacity: inkOpacity});
 				
@@ -117,18 +125,19 @@
 				}
 
 				function removeInk(){
-					$(window).unbind('mouseup mouseleave blur touchend', this);
+					$(window).unbind('mouseup mouseleave blur touchend', removeInk);
 
 					clearInterval(inkGrow);
 
 					var delay = incr < 2 && elem.prop('nodeName').toLowerCase() == 'a' ? 100 : 1;
 					incr = incr < 2 ? 2 : incr += .5;
 					setTimeout(function(){
-							ink.css({
+						ink.css({
 							height: d*incr,
 							width: d*incr,
 							opacity:0
 						});
+						if(!!ink.hasClass('new'))rippleCont.css("background-color","");
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
@@ -137,8 +146,27 @@
 				}
 
 				hoverIncrement();
-				listenerPress();
+
+				if(event.type == "mousedown" && event.which !== 1){
+					setTimeout(function(){
+						removeInk();
+					},100);
+				}else{
+					listenerPress();
+				}
 			}
+		}
+
+		function hexToRGB(hex){
+
+			var patt = /^#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})$/;
+			var matches = patt.exec(hex);
+
+			return {
+				r:parseInt(matches[1], 16),
+				g:parseInt(matches[2], 16),
+				b:parseInt(matches[3], 16)
+			};
 		}
 
 
