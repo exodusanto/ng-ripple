@@ -121,11 +121,13 @@
 				}
 				
 				function listenerPress(){
-					$(window).bind('mouseup mouseleave blur touchend', removeInk);
+					$(window).bind('mouseup blur touchend', removeInk);
+					elem.bind('mouseleave',removeInk);
 				}
 
 				function removeInk(){
-					$(window).unbind('mouseup mouseleave blur touchend', removeInk);
+					$(window).unbind('mouseup blur touchend', removeInk);
+					elem.unbind('mouseleave', removeInk);
 
 					clearInterval(inkGrow);
 
