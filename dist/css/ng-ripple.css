@@ -80,9 +80,12 @@
 .ripple-cont.r-raised:not(.disabled):active{
 	box-shadow: 0 4px 8px 0 rgba(0,0,0,.4);
 }
-.ripple-cont.r-round,.ripple-cont.r-round .ripple-cont,.ripple-cont.r-round .ink-content{
+.ripple-cont.r-round,.ripple-cont.r-round .ripple-cont{
 	border-radius: 50%;
 	overflow: hidden;
+}
+.ripple-cont.r-round .ink-content{
+	border-radius: 50%;
 }
 
 .ripple-cont.disabled{
