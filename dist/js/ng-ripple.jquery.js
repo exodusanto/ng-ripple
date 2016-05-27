@@ -7,7 +7,7 @@
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .2,
-		'rippleIncremental': 1.27
+		'rippleDelay': 100
 	});
 
 	ripple.directive('ripple',['rippleConfig', function(rippleConfig){
@@ -51,16 +51,14 @@
 
 				var ink = $("<i class='ink'></i>");
 				var incr = 0;
+				var incrmax = 0;
 
 				rippleCont.find(".ink").removeClass('new');
 				ink.addClass('new');
 
 				rippleCont.prepend(ink);
-				
-				
-				incr = icon ? rippleConfig.rippleIncremental/2 : 1;
-				
 
+				//Set x and y position inside ripple content
 				var x = event.type != "touchstart" ? 
 					event.pageX - rippleCont.offset().left : 
 					event.originalEvent.touches[0].pageX - rippleCont.offset().left;
@@ -69,16 +67,35 @@
 					event.pageY - rippleCont.offset().top :
 					event.originalEvent.touches[0].pageY - rippleCont.offset().top;
 
+				// if icon set default position: 50% 50%
 				if(!icon){
 					ink.css({top: y+'px', left: x+'px'});
 				}
 				
-				x = x > rippleCont.width()/2 ? x - rippleCont.width()/2 : rippleCont.width()/2 - x;
-				y = y > rippleCont.height()/2 ? y - rippleCont.height()/2 : rippleCont.height()/2 - y;
+				//Set translate of user from center of ripple content
+				x = x > rippleCont.outerWidth()/2 ? x - rippleCont.outerWidth()/2 : rippleCont.outerWidth()/2 - x;
+				y = y > rippleCont.outerHeight()/2 ? y - rippleCont.outerHeight()/2 : rippleCont.outerHeight()/2 - y;
 
-				var d = Math.max(rippleCont.outerWidth() + x, rippleCont.outerHeight() + y);
+				//Set max between width and height
+				var bd = Math.max(rippleCont.outerWidth(), rippleCont.outerHeight());
+				//Set total translate
+				var tr = x + y;
+				//Set diagonal of ink circle
+				var d = bd + tr;
+				//Set default diameter without translate
+				bd -= tr;
+
+				var h = rippleCont.outerHeight();
+				var w = rippleCont.outerWidth();
+
+				//Set diagonal of ripple container
+				var diag = Math.sqrt(w * w + h * h);
+				//Set incremental diameter of ripple
+				var incrmax = (diag - bd);
 				
-				ink.css({height: d*incr, width: d*incr});
+				incrmax = icon ? 0 : incrmax;
+
+				ink.css({height: d+incr, width: d+incr});
 
 				ink.css("opacity",0);
 				
@@ -104,13 +121,13 @@
 				var inkGrow = null;
 
 				function hoverIncrement(){
-					
+					var incrStep = ((incrmax - incr)/100)*10
 					inkGrow = setInterval(function(){
-						if(incr <= rippleConfig.rippleIncremental){
-							incr += .2;
+						if(incr < incrmax){
+							incr += incrStep;
 							ink.css({
-								height: d*incr,
-								width: d*incr
+								height: d+incr,
+								width: d+incr
 							});
 						}else{
 							clearInterval(inkGrow);
@@ -129,12 +146,14 @@
 
 					clearInterval(inkGrow);
 
-					var delay = incr < rippleConfig.rippleIncremental ? 150 : 1;
-					incr = incr < rippleConfig.rippleIncremental ? rippleConfig.rippleIncremental : incr;
+					var delay = incr <= incrmax ? rippleConfig.rippleDelay : 1;
+					incr = incr < incrmax ? incrmax : incr;
+					ink.css({
+							height: d+incr,
+							width: d+incr
+					});
 					setTimeout(function(){
 						ink.css({
-							height: d*incr,
-							width: d*incr,
 							opacity:0
 						});
 						if(!!ink.hasClass('new'))rippleCont.css("background-color","");
