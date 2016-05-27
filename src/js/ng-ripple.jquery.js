@@ -58,7 +58,7 @@
 				rippleCont.prepend(ink);
 				
 				
-				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
+				incr = icon ? rippleConfig.rippleIncremental/2 : 1;
 				
 
 				var x = event.type != "touchstart" ? 
@@ -69,17 +69,19 @@
 					event.pageY - rippleCont.offset().top :
 					event.originalEvent.touches[0].pageY - rippleCont.offset().top;
 
+				if(!icon){
+					ink.css({top: y+'px', left: x+'px'});
+				}
+				
+				x = x > rippleCont.width()/2 ? x - rippleCont.width()/2 : rippleCont.width()/2 - x;
+				y = y > rippleCont.height()/2 ? y - rippleCont.height()/2 : rippleCont.height()/2 - y;
+
 				var d = Math.max(rippleCont.outerWidth() + x, rippleCont.outerHeight() + y);
 				
 				ink.css({height: d*incr, width: d*incr});
 
-				
-				
-				if(!icon){
-					ink.css({top: y+'px', left: x+'px'});
-				}
-
 				ink.css("opacity",0);
+				
 				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
 				
 				rippleCont.css("background-color",'rgba(0,0,0,'+.098+')');
@@ -104,7 +106,7 @@
 				function hoverIncrement(){
 					
 					inkGrow = setInterval(function(){
-						if(incr <= 3){
+						if(incr <= rippleConfig.rippleIncremental){
 							incr += .2;
 							ink.css({
 								height: d*incr,
@@ -127,8 +129,8 @@
 
 					clearInterval(inkGrow);
 
-					var delay = incr < 2 && elem.prop('nodeName').toLowerCase() == 'a' ? 200 : 1;
-					incr = incr < 2 ? 2 : incr += .5;
+					var delay = incr < rippleConfig.rippleIncremental ? 150 : 1;
+					incr = incr < rippleConfig.rippleIncremental ? rippleConfig.rippleIncremental : incr;
 					setTimeout(function(){
 						ink.css({
 							height: d*incr,
@@ -139,7 +141,7 @@
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
-						},400);
+						},450);
 					},delay);
 				}
 

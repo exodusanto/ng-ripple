@@ -6,7 +6,7 @@
 (function($,exports){
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
-		'rippleOpacity': .35,
+		'rippleOpacity': .2,
 		'rippleIncremental': 1.27
 	});
 
@@ -57,9 +57,8 @@
 
 				rippleCont.prepend(ink);
 				
-				var d = Math.max(rippleCont.outerWidth(), rippleCont.outerHeight());
 				
-				ink.css({height: d/2, width: d/2});
+				incr = icon ? rippleConfig.rippleIncremental/2 : 1;
 				
 
 				var x = event.type != "touchstart" ? 
@@ -69,13 +68,20 @@
 				var y = event.type != "touchstart" ? 
 					event.pageY - rippleCont.offset().top :
 					event.originalEvent.touches[0].pageY - rippleCont.offset().top;
-				
-				
+
 				if(!icon){
 					ink.css({top: y+'px', left: x+'px'});
 				}
+				
+				x = x > rippleCont.width()/2 ? x - rippleCont.width()/2 : rippleCont.width()/2 - x;
+				y = y > rippleCont.height()/2 ? y - rippleCont.height()/2 : rippleCont.height()/2 - y;
+
+				var d = Math.max(rippleCont.outerWidth() + x, rippleCont.outerHeight() + y);
+				
+				ink.css({height: d*incr, width: d*incr});
 
 				ink.css("opacity",0);
+				
 				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
 				
 				rippleCont.css("background-color",'rgba(0,0,0,'+.098+')');
@@ -92,14 +98,6 @@
 
 				ink.addClass('animate');
 
-				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
-
-				ink.css({
-					height: d*incr,
-					width: d*incr
-				});
-
-
 
 				ink.css({opacity: inkOpacity});
 				
@@ -108,7 +106,7 @@
 				function hoverIncrement(){
 					
 					inkGrow = setInterval(function(){
-						if(incr <= 3){
+						if(incr <= rippleConfig.rippleIncremental){
 							incr += .2;
 							ink.css({
 								height: d*incr,
@@ -131,8 +129,8 @@
 
 					clearInterval(inkGrow);
 
-					var delay = incr < 2 && elem.prop('nodeName').toLowerCase() == 'a' ? 100 : 1;
-					incr = incr < 2 ? 2 : incr += .5;
+					var delay = incr < rippleConfig.rippleIncremental ? 150 : 1;
+					incr = incr < rippleConfig.rippleIncremental ? rippleConfig.rippleIncremental : incr;
 					setTimeout(function(){
 						ink.css({
 							height: d*incr,
@@ -143,7 +141,7 @@
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
-						},650);
+						},450);
 					},delay);
 				}
 

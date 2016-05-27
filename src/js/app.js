@@ -4,7 +4,7 @@
 	app.run(['rippleConfig', function(rippleConfig){
 
 		rippleConfig.rippleOpacity = .2;
-		rippleConfig.rippleIncremental = 1.27;
+		rippleConfig.rippleIncremental = 1.5;
 
 		console.info("Configuration:",JSON.stringify(rippleConfig));
 
