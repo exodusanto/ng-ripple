@@ -79,12 +79,13 @@
 
 				if(!!inkColor){
 					ink.style.backgroundColor = inkColor;
-
 					var rgba = hexToRGB(inkColor);
 					rippleCont.style.backgroundColor = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')';
 				}else if(!!inkLight){
 					ink.style.backgroundColor = "rgb(255,255,255)";
 					rippleCont.style.backgroundColor = 'rgba(255,255,255,'+.098+')';
+				}else{
+					rippleCont.style.backgroundColor = 'rgba(0,0,0,'+.098+')';
 				}
 
 				addClass(ink,'animate');
