@@ -6,7 +6,7 @@
 (function($,exports){
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
-		'rippleOpacity': .35,
+		'rippleOpacity': .2,
 		'rippleIncremental': 1.27
 	});
 
@@ -57,9 +57,8 @@
 
 				rippleCont.prepend(ink);
 				
-				var d = Math.max(rippleCont.outerWidth(), rippleCont.outerHeight());
 				
-				ink.css({height: d/2, width: d/2});
+				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
 				
 
 				var x = event.type != "touchstart" ? 
@@ -69,6 +68,11 @@
 				var y = event.type != "touchstart" ? 
 					event.pageY - rippleCont.offset().top :
 					event.originalEvent.touches[0].pageY - rippleCont.offset().top;
+
+				var d = Math.max(rippleCont.outerWidth() + x, rippleCont.outerHeight() + y);
+				
+				ink.css({height: d*incr, width: d*incr});
+
 				
 				
 				if(!icon){
@@ -91,14 +95,6 @@
 				}
 
 				ink.addClass('animate');
-
-				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
-
-				ink.css({
-					height: d*incr,
-					width: d*incr
-				});
-
 
 
 				ink.css({opacity: inkOpacity});
@@ -131,7 +127,7 @@
 
 					clearInterval(inkGrow);
 
-					var delay = incr < 2 && elem.prop('nodeName').toLowerCase() == 'a' ? 100 : 1;
+					var delay = incr < 2 && elem.prop('nodeName').toLowerCase() == 'a' ? 200 : 1;
 					incr = incr < 2 ? 2 : incr += .5;
 					setTimeout(function(){
 						ink.css({
@@ -143,7 +139,7 @@
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
-						},650);
+						},400);
 					},delay);
 				}
 
