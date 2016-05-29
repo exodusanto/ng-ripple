@@ -70,11 +70,15 @@
 				// if icon set default position: 50% 50%
 				if(!icon){
 					ink.css({top: y+'px', left: x+'px'});
+					
+					//Set translate of user from center of ripple content
+					x = x > rippleCont.outerWidth()/2 ? x - rippleCont.outerWidth()/2 : rippleCont.outerWidth()/2 - x;
+					y = y > rippleCont.outerHeight()/2 ? y - rippleCont.outerHeight()/2 : rippleCont.outerHeight()/2 - y;
+				}else{
+					x = 0;
+					y = 0;
 				}
 				
-				//Set translate of user from center of ripple content
-				x = x > rippleCont.outerWidth()/2 ? x - rippleCont.outerWidth()/2 : rippleCont.outerWidth()/2 - x;
-				y = y > rippleCont.outerHeight()/2 ? y - rippleCont.outerHeight()/2 : rippleCont.outerHeight()/2 - y;
 
 				//Set max between width and height
 				var bd = Math.max(rippleCont.outerWidth(), rippleCont.outerHeight());
@@ -114,7 +118,6 @@
 				}
 
 				ink.addClass('animate');
-
 
 				ink.css({opacity: inkOpacity});
 				

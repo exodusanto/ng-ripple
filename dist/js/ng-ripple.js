@@ -6,8 +6,8 @@
 (function(exports){
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
-		'rippleOpacity': .35,
-		'rippleIncremental': 2
+		'rippleOpacity': .2,
+		'rippleDelay': 100
 	});
 
 	ripple.directive('ripple',['rippleConfig', function(rippleConfig){
@@ -41,13 +41,14 @@
 			function createRipple(event){
 				var targetInk = $(event.target);
 
-				if(hasClass(targetInk,'r-noink') || !!parents(targetInk,'.r-noink').length)return;
+				if(hasClass(targetInk,'r-noink') || !!parents(targetInk,'r-noink').length)return;
 
 				if(!!overInk)rippleCont.style.display = "block";
 
 
 				var ink = document.createElement("i");
 				var incr = 0;
+				var incrmax = 0;
 
 				addClass(ink,'ink');
 
@@ -55,12 +56,8 @@
 				addClass(ink,'new');
 
 				rippleCont.insertBefore(ink,rippleCont.firstChild);
-				
-				var d = Math.max(rippleCont.offsetWidth, rippleCont.offsetHeight);
-				
-				ink.style.height = d/2+"px";
-				ink.style.width = d/2+"px";
 
+				//Set x and y position inside ripple content
 				var x = event.type != "touchstart" ? 
 					event.pageX - offestElm(rippleCont).left : 
 					event.originalEvent.touches[0].pageX - offestElm(rippleCont).left;
@@ -69,14 +66,46 @@
 					event.pageY - offestElm(rippleCont).top :
 					event.originalEvent.touches[0].pageY - offestElm(rippleCont).top;
 				
-				
+				// if icon set default position: 50% 50%
 				if(!icon){
 					ink.style.top = y+'px';
 					ink.style.left = x+'px';
+
+					//Set translate of user from center of ripple content
+					x = x > rippleCont.offsetWidth/2 ? x - rippleCont.offsetWidth/2 : rippleCont.offsetWidth/2 - x;
+					y = y > rippleCont.offsetHeight/2 ? y - rippleCont.offsetHeight/2 : rippleCont.offsetHeight/2 - y;
+				}else{
+					x = 0;
+					y = 0;
 				}
 
-				ink.style.opacity = 0;
+				
+				//Set max between width and height
+				var bd = Math.max(rippleCont.offsetWidth, rippleCont.offsetHeight);
+				//Set total translate
+				var tr = x + y;
+				//Set diagonal of ink circle
+				var d = bd + tr;
+				//Set default diameter without translate
+				bd -= tr;
 
+				var h = rippleCont.offsetHeight;
+				var w = rippleCont.offsetWidth;
+
+				//Set diagonal of ripple container
+				var diag = Math.sqrt(w * w + h * h);
+				//Set incremental diameter of ripple
+				var incrmax = (diag - bd);
+				
+				incrmax = icon ? 0 : incrmax;
+				
+				ink.style.height = d+incr+"px";
+				ink.style.width = d+incr+"px";
+
+				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
+				
+				ink.style.opacity = 0;
+				
 				if(!!inkColor){
 					ink.style.backgroundColor = inkColor;
 					var rgba = hexToRGB(inkColor);
@@ -92,28 +121,21 @@
 
 				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
 
-				ink.style.height = d*incr+"px";
-				ink.style.width = d*incr+"px";
-
-
-				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
-
 				ink.style.opacity = inkOpacity;
 				
 				var inkGrow = null;
 
 				function hoverIncrement(){
-					inkGrow = setTimeout(function(){
-						inkGrow = setInterval(function(){
-							if(incr <= 2.5){
-								incr += .2;
-								ink.style.height = d*incr+"px";
-								ink.style.width = d*incr+"px";
-							}else{
-								clearInterval(inkGrow);
-							}
-						},50);
-					},100);
+					var incrStep = ((incrmax - incr)/100)*10
+					inkGrow = setInterval(function(){
+						if(incr < incrmax){
+							incr += incrStep;
+							ink.style.height = d+incr+"px";
+							ink.style.width = d+incr+"px";
+						}else{
+							clearInterval(inkGrow);
+						}
+					},50);
 				}
 
 				function listenerPress(){
@@ -127,18 +149,18 @@
 
 					clearInterval(inkGrow);
 
-					var delay = incr < 2 && element.prop('nodeName').toLowerCase() == 'a' ? 100 : 1;
-					incr = incr < 2 ? 2 : incr += .5;
+					var delay = incr <= incrmax ? rippleConfig.rippleDelay : 1;
+					incr = incr < incrmax ? incrmax : incr;
+					ink.style.height = d+incr+"px",
+					ink.style.width = d+incr+"px",
 					setTimeout(function(){
-						ink.style.height = d*incr+"px",
-						ink.style.width = d*incr+"px",
 						ink.style.opacity = 0
 
-						if(!!hasClass(ink,'new'))rippleCont.style.backgroundColor = "";
+						if(!!new RegExp('/(new)/g').test(ink.className))rippleCont.style.backgroundColor = "";
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "none";
-						},650);
+						},450);
 					},delay);
 				}
 
@@ -147,15 +169,15 @@
 			}
 		}
 
-		function parents(el,sl){
+		function parents(el,cl){
 			var parents = [];
-
-			var p = el[0].parentNode;
+			var p = el[0].parentElement;
+			window.tes = p;
 
 			while(p !== null){
 				var o = p;
 
-				if(hasClass(o,sl))parents.push(o);
+				if(new RegExp('/(' + cl + ')/g').test(o.className))parents.push(o);
 				p = o.parentNode;
 			}
 			return parents;
@@ -205,10 +227,10 @@
 		}
 
 		function hasClass(e,name){
-			if (e.classList){
-			  return e.classList.contains(name);
+			if (e[0].classList){
+			  return e[0].classList.contains(name);
 			}else{
-			  return new RegExp('(^| )' + name + '( |$)', 'gi').test(e.className);
+			  return new RegExp('(^| )' + name + '( |$)', 'gi').test(e[0].className);
 			}
 		}
 
