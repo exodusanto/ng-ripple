@@ -106,15 +106,17 @@
 				
 				ink.style.opacity = 0;
 				
-				if(!!inkColor){
-					ink.style.backgroundColor = inkColor;
-					var rgba = hexToRGB(inkColor);
-					rippleCont.style.backgroundColor = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')';
-				}else if(!!inkLight){
-					ink.style.backgroundColor = "rgb(255,255,255)";
-					rippleCont.style.backgroundColor = 'rgba(255,255,255,'+.098+')';
-				}else{
+				if(!icon){
 					rippleCont.style.backgroundColor = 'rgba(0,0,0,'+.098+')';
+
+					if(!!inkColor){
+						ink.style.backgroundColor = inkColor;
+						var rgba = hexToRGB(inkColor);
+						rippleCont.style.backgroundColor = 'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')';
+					}else if(!!inkLight){
+						ink.style.backgroundColor = "rgb(255,255,255)";
+						rippleCont.style.backgroundColor = 'rgba(255,255,255,'+.098+')';
+					}
 				}
 
 				addClass(ink,'animate');
@@ -156,7 +158,7 @@
 					setTimeout(function(){
 						ink.style.opacity = 0
 
-						if(!!new RegExp('/(new)/g').test(ink.className))rippleCont.style.backgroundColor = "";
+						if(!!new RegExp('/(new)/g').test(ink.className) && !icon)rippleCont.style.backgroundColor = "";
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "none";

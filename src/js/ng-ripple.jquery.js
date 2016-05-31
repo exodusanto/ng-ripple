@@ -105,16 +105,19 @@
 				
 				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
 				
-				rippleCont.css("background-color",'rgba(0,0,0,'+.098+')');
 
-				if(!!inkColor){
-					ink.css("background-color",inkColor);
+				if(!icon){
+					rippleCont.css("background-color",'rgba(0,0,0,'+.098+')');
+					
+					if(!!inkColor){
+						ink.css("background-color",inkColor);
 
-					var rgba = hexToRGB(inkColor);
-					rippleCont.css("background-color",'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')')
-				}else if(!!inkLight){
-					ink.css("background-color","rgb(255,255,255)");
-					rippleCont.css("background-color",'rgba(255,255,255,'+.098+')');
+						var rgba = hexToRGB(inkColor);
+						rippleCont.css("background-color",'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')')
+					}else if(!!inkLight){
+						ink.css("background-color","rgb(255,255,255)");
+						rippleCont.css("background-color",'rgba(255,255,255,'+.098+')');
+					}
 				}
 
 				ink.addClass('animate');
@@ -159,7 +162,7 @@
 						ink.css({
 							opacity:0
 						});
-						if(!!ink.hasClass('new'))rippleCont.css("background-color","");
+						if(!!ink.hasClass('new') && !icon)rippleCont.css("background-color","");
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
