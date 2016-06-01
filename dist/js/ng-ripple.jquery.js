@@ -104,18 +104,20 @@
 				ink.css("opacity",0);
 				
 				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
-				
+
+				if(!!inkColor){
+					ink.css("background-color",inkColor);
+				}else if(!!inkLight){
+					ink.css("background-color","rgb(255,255,255)");
+				}
 
 				if(!icon){
 					rippleCont.css("background-color",'rgba(0,0,0,'+.098+')');
 					
 					if(!!inkColor){
-						ink.css("background-color",inkColor);
-
 						var rgba = hexToRGB(inkColor);
-						rippleCont.css("background-color",'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')')
+						rippleCont.css("background-color",'rgba('+rgba.r+','+rgba.g+','+rgba.b+','+.098+')');
 					}else if(!!inkLight){
-						ink.css("background-color","rgb(255,255,255)");
 						rippleCont.css("background-color",'rgba(255,255,255,'+.098+')');
 					}
 				}
