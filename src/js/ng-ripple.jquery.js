@@ -36,15 +36,14 @@
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 
 
-			if(typeof attributes.rDisabled == "undefined" && !elem.hasClass('disabled')){
-				elem.bind('mousedown touchstart',createRipple);
-			}
+			elem.bind('mousedown touchstart',createRipple);
 
 
 			function createRipple(event){
 
 				var targetInk = $(event.target);
 
+				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
 
 				if(!!overInk)rippleCont.show(0);

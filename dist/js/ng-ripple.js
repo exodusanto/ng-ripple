@@ -33,14 +33,13 @@
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 
-			if(typeof attributes.rDisabled == "undefined" && !hasClass(element,'disabled')){
-				addListenerMulti(element[0],"mousedown touchstart",createRipple);
-			}
+			addListenerMulti(element[0],"mousedown touchstart",createRipple);
 
 
 			function createRipple(event){
 				var targetInk = $(event.target);
 
+				if(typeof attributes.rDisabled != "undefined" || hasClass(element,'disabled'))return;
 				if(hasClass(targetInk,'r-noink') || !!parents(targetInk,'r-noink').length)return;
 
 				if(!!overInk)rippleCont.style.display = "block";
