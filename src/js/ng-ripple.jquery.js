@@ -48,14 +48,15 @@
 
 				if(!!overInk)rippleCont.show(0);
 
-				var ink = $("<i class='ink'></i>");
+				var inkWrapper = $("<span class='ink'><i></i></span>");
+				var ink = inkWrapper.find("i");
 				var incr = 0;
 				var incrmax = 0;
 
 				rippleCont.find(".ink").removeClass('new');
-				ink.addClass('new');
+				inkWrapper.addClass('new');
 
-				rippleCont.prepend(ink);
+				rippleCont.prepend(inkWrapper);
 
 				//Set x and y position inside ripple content
 				var x = event.type != "touchstart" ? 
@@ -68,7 +69,7 @@
 
 				// if icon set default position: 50% 50%
 				if(!icon){
-					ink.css({top: y+'px', left: x+'px'});
+					inkWrapper.css({top: y+'px', left: x+'px'});
 					
 					//Set translate of user from center of ripple content
 					x = x > rippleCont.outerWidth()/2 ? x - rippleCont.outerWidth()/2 : rippleCont.outerWidth()/2 - x;
@@ -98,7 +99,7 @@
 				
 				incrmax = icon ? 0 : incrmax;
 
-				ink.css({height: d+incr, width: d+incr});
+				inkWrapper.css({height: d+incr, width: d+incr});
 
 				ink.css("opacity",0);
 				
@@ -121,7 +122,9 @@
 					}
 				}
 
-				ink.addClass('animate');
+				inkWrapper.addClass('animate');
+
+				// ink.css({height: d+incr, width: d+incr});
 
 				ink.css({opacity: inkOpacity});
 				
@@ -132,7 +135,7 @@
 					inkGrow = setInterval(function(){
 						if(incr < incrmax){
 							incr += incrStep;
-							ink.css({
+							inkWrapper.css({
 								height: d+incr,
 								width: d+incr
 							});
@@ -155,17 +158,19 @@
 
 					var delay = incr <= incrmax ? rippleConfig.rippleDelay : 1;
 					incr = incr < incrmax ? incrmax : incr;
-					ink.css({
+					inkWrapper.css({
 							height: d+incr,
 							width: d+incr
 					});
 					setTimeout(function(){
-						ink.css({
-							opacity:0
-						});
-						if(!!ink.hasClass('new') && !icon)rippleCont.css("background-color","");
 						setTimeout(function(){
-							ink.remove();
+							ink.css({
+								opacity:0
+							});
+							if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
+						},100);
+						setTimeout(function(){
+							inkWrapper.remove();
 							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
 						},450);
 					},delay);
