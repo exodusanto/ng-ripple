@@ -122,7 +122,9 @@
 					}
 				}
 
-				addClass(ink,'animate');
+				setTimeout(function(){
+					addClass(ink,'animate');
+				},1);
 
 				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
 
@@ -165,7 +167,7 @@
 						setTimeout(function(){
 							ink.remove();
 							if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "none";
-						},450);
+						},550);
 					},delay);
 				}
 

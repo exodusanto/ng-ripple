@@ -122,7 +122,9 @@
 					}
 				}
 
-				inkWrapper.addClass('animate');
+				setTimeout(function(){
+					inkWrapper.addClass('animate');
+				},1);
 
 				// ink.css({height: d+incr, width: d+incr});
 
@@ -163,16 +165,14 @@
 							width: d+incr
 					});
 					setTimeout(function(){
-						setTimeout(function(){
-							ink.css({
-								opacity:0
-							});
-							if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
-						},100);
+						ink.css({
+							opacity:0
+						});
+						if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
 						setTimeout(function(){
 							inkWrapper.remove();
 							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
-						},450);
+						},550);
 					},delay);
 				}
 
