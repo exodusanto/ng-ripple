@@ -11,6 +11,8 @@
 	});
 
 	ripple.directive('ripple',['rippleConfig', function(rippleConfig){
+		
+		var rippleEventArray = [];
 
 		function rippleInit(scope,element,attributes){
 			var elem = null;
@@ -23,7 +25,7 @@
 			
 			elem = $(element);
 			elem.removeClass('ripple');
-			rippleCont = elem.find(".ink-content");
+			rippleCont = elem.children(".ink-content");
 
 			element.on("$destroy",function(){
 				elem.unbind('mousedown touchstart',createRipple);
@@ -40,6 +42,9 @@
 
 
 			function createRipple(event){
+
+				if(rippleEventArray.indexOf(event.timeStamp) != -1)return;
+				rippleEventArray.push(event.timeStamp);
 
 				var targetInk = $(event.target);
 

@@ -109,6 +109,7 @@
 	z-index: 2;
 	display:inline-block;
 	max-width: 100%;
+	vertical-align: top;
 }
 .ripple-cont .ink-content{
 	position: absolute;
@@ -127,7 +128,7 @@
 	border-radius: 2px;
 	transition: all 400ms cubic-bezier(0.25, 0.8, 0.25, 1) 0ms;
 }
-.ripple-cont.r-overink .ink-content{
+.ripple-cont.r-overink > .ink-content{
 	display: none;
 	z-index: 3;
 }
