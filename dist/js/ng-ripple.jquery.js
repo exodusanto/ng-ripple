@@ -22,6 +22,7 @@
 			var customOpacity = null;
 			var icon = false;
 			var overInk = false;
+			var preventInk = false;
 			
 			elem = $(element);
 			elem.removeClass('ripple');
@@ -36,6 +37,7 @@
 			inkLight = typeof attributes.rLight !== "undefined";
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
+			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
 
 
 			elem.bind('mousedown touchstart',createRipple);
@@ -50,10 +52,11 @@
 
 				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
+				if(!!preventInk && elem.is(preventInk))return;
 
 				if(!!overInk)rippleCont.show(0);
 
-				var inkWrapper = $("<span class='ink'><i></i></span>");
+				var inkWrapper = $("<div class='ink'><i></i></div>");
 				var ink = inkWrapper.find("i");
 				var incr = 0;
 				var incrmax = 0;
