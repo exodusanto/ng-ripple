@@ -144,6 +144,7 @@
     -webkit-transform-origin: 50% 50%;
     -moz-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
+	will-change: transform, height, width;
 }
 .ink-content .ink > i{
 	background: rgb(0,0,0);
@@ -158,6 +159,7 @@
     -webkit-transform-origin: 50% 50%;
     -moz-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
+	will-change: transform, opacity;
 }
 .ripple-cont.r-icon .ink{
 	top: 50%;

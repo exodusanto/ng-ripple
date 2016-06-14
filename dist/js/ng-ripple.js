@@ -12,6 +12,8 @@
 
 	ripple.directive('ripple',['rippleConfig', function(rippleConfig){
 
+		var rippleEventArray = [];
+
 		function rippleInit(scope,element,attributes){
 			var rippleCont = null;
 			var inkLight = false;
@@ -19,6 +21,7 @@
 			var customOpacity = null;
 			var icon = false;
 			var overInk = false;
+			var preventInk = false;
 		
 			removeClass(element,'ripple');
 			rippleCont = element[0].querySelectorAll(":scope >.ink-content")[0];
@@ -32,15 +35,21 @@
 			inkLight = typeof attributes.rLight !== "undefined";
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
+			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
 
 			addListenerMulti(element[0],"mousedown touchstart",createRipple);
 
 
 			function createRipple(event){
+
+				if(rippleEventArray.indexOf(event.timeStamp) != -1)return;
+				rippleEventArray.push(event.timeStamp);
+				
 				var targetInk = $(event.target);
 
 				if(typeof attributes.rDisabled != "undefined" || hasClass(element,'disabled'))return;
 				if(hasClass(targetInk,'r-noink') || !!parents(targetInk,'r-noink').length)return;
+				if(!!preventInk && elem.is(preventInk))return;
 
 				if(!!overInk)rippleCont.style.display = "block";
 
@@ -165,8 +174,7 @@
 					inkWrapper.style.width = d+incr+"px",
 					setTimeout(function(){
 						ink.style.opacity = 0
-
-						if(!!new RegExp('/(new)/g').test(inkWrapper.className) && !icon)rippleCont.style.backgroundColor = "";
+						if(!!new RegExp('new').test(inkWrapper.className) && !icon)rippleCont.style.backgroundColor = "";
 						setTimeout(function(){
 							inkWrapper.remove();
 							if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "none";
@@ -182,12 +190,11 @@
 		function parents(el,cl){
 			var parents = [];
 			var p = el[0].parentElement;
-			window.tes = p;
 
 			while(p !== null){
 				var o = p;
 
-				if(new RegExp('/(' + cl + ')/g').test(o.className))parents.push(o);
+				if(new RegExp(cl).test(o.className))parents.push(o);
 				p = o.parentNode;
 			}
 			return parents;
@@ -222,7 +229,7 @@
 						if (e.classList){
 						  e.classList.remove(name);
 						}else{
-						  e.className = e.className.replace(new RegExp("/("+name+")\s/"),"");
+						  e.className = e.className.replace(new RegExp(name));
 						}
 					});
 				}else{
@@ -230,7 +237,7 @@
 					if (el.classList){
 					  el.classList.remove(name);
 					}else{
-					  el.className = el.className.replace(new RegExp("/("+name+")\s/"),"");
+					  el.className = el.className.replace(new RegExp(name));
 					}
 				}
 			}
