@@ -4,7 +4,7 @@ Material ripple effects directive for AngularJS,
 Inspired by **Angular Material Design** , 
 this implementation contains the ripple animation for buttons and links
 ### Version
-0.9.5
+0.9.6
 
 ### Dependencies
  - AngularJs
@@ -106,6 +106,13 @@ Prevent ink for specific element and children
 </ripple>
 ```
 
+Prevent ink with specific class
+``` html
+<ripple>
+	<ripple class="selected" r-prevent=".selected"></ripple>
+</ripple>
+```
+
 ## Angular Options
 ``` js
     app.run(['rippleConfig', function(rippleConfig){
@@ -123,7 +130,11 @@ For all element
 This is the delay of exit animation of ink
 
 ## Changelog
-Version 0.9.4:
+Version 0.9.6:
+
+Fix for Safari and Chrome 51 (Animation Bug)
+
+Version 0.9.5:
 
 Re-created animation of ink and general fix
 
