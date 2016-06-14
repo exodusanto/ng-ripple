@@ -21,7 +21,7 @@
 			var overInk = false;
 		
 			removeClass(element,'ripple');
-			rippleCont = element[0].querySelectorAll(".ink-content")[0];
+			rippleCont = element[0].querySelectorAll(":scope >.ink-content")[0];
 
 			element.on("$destroy",function(){
 				removeListenerMulti(element[0],"mousedown touchstart",createRipple);
@@ -45,16 +45,19 @@
 				if(!!overInk)rippleCont.style.display = "block";
 
 
-				var ink = document.createElement("i");
+				var inkWrapper = document.createElement("div");
+				var ink = "<i></i>";
 				var incr = 0;
 				var incrmax = 0;
 
-				addClass(ink,'ink');
+				inkWrapper.innerHTML = ink;
+				ink = inkWrapper.querySelectorAll(":scope > i")[0];
+				addClass(inkWrapper,'ink');
 
 				removeClass(rippleCont.querySelectorAll(".ink"),'new');
-				addClass(ink,'new');
+				addClass(inkWrapper,'new');
 
-				rippleCont.insertBefore(ink,rippleCont.firstChild);
+				rippleCont.insertBefore(inkWrapper,rippleCont.firstChild);
 
 				//Set x and y position inside ripple content
 				var x = event.type != "touchstart" ? 
@@ -67,8 +70,8 @@
 				
 				// if icon set default position: 50% 50%
 				if(!icon){
-					ink.style.top = y+'px';
-					ink.style.left = x+'px';
+					inkWrapper.style.top = y+'px';
+					inkWrapper.style.left = x+'px';
 
 					//Set translate of user from center of ripple content
 					x = x > rippleCont.offsetWidth/2 ? x - rippleCont.offsetWidth/2 : rippleCont.offsetWidth/2 - x;
@@ -98,8 +101,8 @@
 				
 				incrmax = icon ? 0 : incrmax;
 				
-				ink.style.height = d+incr+"px";
-				ink.style.width = d+incr+"px";
+				inkWrapper.style.height = d+incr+"px";
+				inkWrapper.style.width = d+incr+"px";
 
 				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
 				
@@ -123,7 +126,7 @@
 				}
 
 				setTimeout(function(){
-					addClass(ink,'animate');
+					addClass(inkWrapper,'animate');
 				},1);
 
 				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
@@ -137,8 +140,8 @@
 					inkGrow = setInterval(function(){
 						if(incr < incrmax){
 							incr += incrStep;
-							ink.style.height = d+incr+"px";
-							ink.style.width = d+incr+"px";
+							inkWrapper.style.height = d+incr+"px";
+							inkWrapper.style.width = d+incr+"px";
 						}else{
 							clearInterval(inkGrow);
 						}
@@ -158,14 +161,14 @@
 
 					var delay = incr <= incrmax ? rippleConfig.rippleDelay : 1;
 					incr = incr < incrmax ? incrmax : incr;
-					ink.style.height = d+incr+"px",
-					ink.style.width = d+incr+"px",
+					inkWrapper.style.height = d+incr+"px",
+					inkWrapper.style.width = d+incr+"px",
 					setTimeout(function(){
 						ink.style.opacity = 0
 
-						if(!!new RegExp('/(new)/g').test(ink.className) && !icon)rippleCont.style.backgroundColor = "";
+						if(!!new RegExp('/(new)/g').test(inkWrapper.className) && !icon)rippleCont.style.backgroundColor = "";
 						setTimeout(function(){
-							ink.remove();
+							inkWrapper.remove();
 							if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "none";
 						},550);
 					},delay);
@@ -292,7 +295,7 @@
 
 			addClass(markup,'ripple-cont');
 
-			markup.innerHTML += "<span class='ripple-content'>"+content+"</span>";
+			markup.innerHTML += "<div class='ripple-content'>"+content+"</div>";
 			markup.innerHTML += "<div class='ink-content'></div>";
 			
 			return markup.outerHTML;
