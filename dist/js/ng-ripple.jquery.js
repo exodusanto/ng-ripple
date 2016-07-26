@@ -23,6 +23,7 @@
 			var icon = false;
 			var overInk = false;
 			var preventInk = false;
+			var rippleNow = false;
 			
 			elem = $(element);
 			elem.removeClass('ripple');
@@ -45,7 +46,6 @@
 
 			function createRipple(event){
 				
-				event.preventDefault();
 
 				if(rippleEventArray.indexOf(event.timeStamp) != -1)return;
 				rippleEventArray.push(event.timeStamp);
@@ -55,6 +55,8 @@
 				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
 				if(!!preventInk && elem.is(preventInk))return;
+				if(rippleNow != false) return;
+				rippleNow = true;
 
 				if(!!overInk)rippleCont.show(0);
 
@@ -163,6 +165,7 @@
 				}
 
 				function removeInk(){
+					rippleNow = false;
 					$(window).unbind('mouseup blur touchend', removeInk);
 					elem.unbind('mouseleave', removeInk);
 
