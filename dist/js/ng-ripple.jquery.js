@@ -44,6 +44,8 @@
 
 
 			function createRipple(event){
+				
+				event.preventDefault();
 
 				if(rippleEventArray.indexOf(event.timeStamp) != -1)return;
 				rippleEventArray.push(event.timeStamp);
