@@ -22,7 +22,6 @@
 			var icon = false;
 			var overInk = false;
 			var preventInk = false;
-			var rippleNow = false;
 		
 			removeClass(element,'ripple');
 			rippleCont = element[0].querySelectorAll(":scope >.ink-content")[0];
@@ -55,8 +54,6 @@
 				if(!!preventInk && elem.is(preventInk))return;
 
 				if(!!overInk)rippleCont.style.display = "block";
-				if(rippleNow != false) return;
-				rippleNow = true;
 
 
 				var inkWrapper = document.createElement("div");
@@ -168,7 +165,6 @@
 				}
 				
 				function removeInk(){
-					rippleNow = false;
 					removeListenerMulti(window,'mouseup mouseleave touchend',removeInk);
 					removeListenerMulti(element[0],'mouseleave',removeInk);
 

@@ -3,6 +3,7 @@
 * Name: ng-ripple
 * Description: Material ripple effects for angularjs
 */
+
 (function($,exports){
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
@@ -23,14 +24,18 @@
 			var icon = false;
 			var overInk = false;
 			var preventInk = false;
-			var rippleNow = false;
 			
 			elem = $(element);
 			elem.removeClass('ripple');
 			rippleCont = elem.children(".ink-content");
+			
+			var listenType = {
+				"start" : ('ontouchstart' in document.documentElement)  ? 'touchstart' : 'mousedown',
+				"end" : ('ontouchend' in document.documentElement)  ? 'touchend' : 'mouseup'
+			};
 
 			element.on("$destroy",function(){
-				elem.unbind('mousedown touchstart',createRipple);
+				elem.unbind(listenType.start,createRipple);
 			});
 
 			icon = elem.hasClass('r-icon');
@@ -41,11 +46,10 @@
 			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
 
 
-			elem.bind('mousedown touchstart',createRipple);
+			elem.bind(listenType.start,createRipple);
 
 
 			function createRipple(event){
-				
 
 				if(rippleEventArray.indexOf(event.timeStamp) != -1)return;
 				rippleEventArray.push(event.timeStamp);
@@ -55,15 +59,14 @@
 				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
 				if(!!preventInk && elem.is(preventInk))return;
-				if(rippleNow != false) return;
-				rippleNow = true;
 
-				if(!!overInk)rippleCont.show(0);
+				if(!!overInk)rippleCont.css("z-index","3");
 
 				var inkWrapper = $("<div class='ink'><i></i></div>");
 				var ink = inkWrapper.find("i");
 				var incr = 0;
 				var incrmax = 0;
+				var longTouch = null;
 
 				rippleCont.find(".ink").removeClass('new');
 				inkWrapper.addClass('new');
@@ -160,16 +163,16 @@
 				}
 				
 				function listenerPress(){
-					$(window).bind('mouseup blur touchend', removeInk);
+					$(window).bind(listenType.end+' blur', removeInk);
 					elem.bind('mouseleave',removeInk);
 				}
 
 				function removeInk(){
-					rippleNow = false;
-					$(window).unbind('mouseup blur touchend', removeInk);
+					$(window).unbind(listenType.end+' blur', removeInk);
 					elem.unbind('mouseleave', removeInk);
 
 					clearInterval(inkGrow);
+					clearInterval(longTouch);
 
 					var delay = incr <= incrmax ? rippleConfig.rippleDelay : 1;
 					incr = incr < incrmax ? incrmax : incr;
@@ -184,7 +187,7 @@
 						if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
 						setTimeout(function(){
 							inkWrapper.remove();
-							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
+							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.css("z-index","-1");
 						},550);
 					},delay);
 				}
@@ -195,6 +198,11 @@
 					setTimeout(function(){
 						removeInk();
 					},100);
+				}else if(event.type == "touchstart"){
+					longTouch = setTimeout(function(){
+						removeInk();
+					},1000);
+					listenerPress();
 				}else{
 					listenerPress();
 				}
