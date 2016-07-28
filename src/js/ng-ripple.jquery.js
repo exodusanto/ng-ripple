@@ -142,8 +142,8 @@
 				},1);
 
 				// ink.css({height: d+incr, width: d+incr});
-
 				ink.css({opacity: inkOpacity});
+
 				
 				var inkGrow = null;
 

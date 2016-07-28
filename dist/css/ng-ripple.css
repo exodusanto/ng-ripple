@@ -130,6 +130,7 @@
 }
 .ripple-cont.r-overink > .ink-content{
 	z-index: -1;
+	transition: all 400ms cubic-bezier(0.25, 0.8, 0.25, 1) 0ms, z-index 1ms linear 0s;
 }
 .ink-content .ink, .ink-content .ink > i{
 	display: block; position: absolute;
