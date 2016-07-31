@@ -3,7 +3,6 @@
 * Name: ng-ripple
 * Description: Material ripple effects for angularjs
 */
-
 (function($,exports){
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
@@ -67,6 +66,7 @@
 				var incr = 0;
 				var incrmax = 0;
 				var longTouch = null;
+				var scrollTouch = null;
 
 				rippleCont.find(".ink").removeClass('new');
 				inkWrapper.addClass('new');
@@ -173,6 +173,7 @@
 
 					clearInterval(inkGrow);
 					clearInterval(longTouch);
+					clearInterval(scrollTouch);
 
 					var delay = incr <= incrmax ? rippleConfig.rippleDelay : 1;
 					incr = incr < incrmax ? incrmax : incr;
@@ -192,6 +193,20 @@
 					},delay);
 				}
 
+				function forceRemoveInk(){
+					$(window).unbind('scroll', forceRemoveInk);
+					$(window).unbind(listenType.end+' blur scroll', removeInk);
+					elem.unbind('mouseleave', removeInk);
+
+					clearInterval(inkGrow);
+					clearInterval(longTouch);
+					clearInterval(scrollTouch);
+
+					if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
+					inkWrapper.remove();
+					if(!!overInk && !rippleCont.find(".ink").length)rippleCont.css("z-index","-1");
+				}
+
 				hoverIncrement();
 
 				if(event.type == "mousedown" && event.which !== 1){
@@ -202,6 +217,10 @@
 					longTouch = setTimeout(function(){
 						removeInk();
 					},1000);
+					$(window).bind('scroll',forceRemoveInk);
+					scrollTouch = setTimeout(function(){
+						$(window).unbind('scroll',forceRemoveInk);
+					},300);
 					listenerPress();
 				}else{
 					listenerPress();
