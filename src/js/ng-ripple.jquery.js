@@ -7,7 +7,8 @@
 	var ripple = angular.module('ng-ripple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .2,
-		'rippleDelay': 100
+		'rippleDelay': 100,
+		'mobileTouch': false
 	});
 
 	ripple.directive('ripple',['rippleConfig', function(rippleConfig){
@@ -29,8 +30,12 @@
 			rippleCont = elem.children(".ink-content");
 			
 			var listenType = {
-				"start" : ('ontouchstart' in document.documentElement)  ? 'touchstart' : 'mousedown',
-				"end" : ('ontouchend' in document.documentElement)  ? 'touchend' : 'mouseup'
+				"start" : ('ontouchstart' in document.documentElement) 
+						? !!rippleConfig.mobileTouch 
+							? 'touchstart'
+							: 'click'
+						: 'mousedown',
+				"end" : ('ontouchend' in document.documentElement) ? 'touchend' : 'mouseup'
 			};
 
 			element.on("$destroy",function(){
@@ -213,6 +218,10 @@
 					setTimeout(function(){
 						removeInk();
 					},100);
+				}else if(event.type == "click"){
+					setTimeout(function(){
+						removeInk();
+					},200);
 				}else if(event.type == "touchstart"){
 					longTouch = setTimeout(function(){
 						removeInk();
