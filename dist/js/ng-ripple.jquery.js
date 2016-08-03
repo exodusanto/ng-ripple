@@ -26,6 +26,7 @@
 			var preventInk = false;
 			
 			elem = $(element);
+			overInk = elem.hasClass('r-overink');
 
 			if(typeof PointerEventsPolyfill !== "undefined"){
 				PointerEventsPolyfill.initialize({
@@ -35,7 +36,10 @@
 			}
 
 			elem.removeClass('ripple');
-			elem.removeAttr('href');
+			
+			if(overInk){
+				elem.removeAttr('href');
+			}
 
 			rippleCont = elem.children(".ink-content");
 			
@@ -53,7 +57,6 @@
 			});
 
 			icon = elem.hasClass('r-icon');
-			overInk = elem.hasClass('r-overink');
 			inkLight = typeof attributes.rLight !== "undefined";
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
@@ -262,8 +265,14 @@
 
 		function createMarkup(element){
 			var content = $(element).html();
-			var markup = $("<div></div>");
-			var replacement = $("<button></button>");
+			var markup = $("<button></button>");
+			var overink = element.hasClass('r-overink');
+
+			if(overink){
+				markup = $("<div></div>");
+				var replacement = $("<button></button>");
+			}
+
 
 			if($(element).prop('nodeName').toLowerCase() != "ripple"){
 				var cloneElement = $(element).clone();
@@ -271,17 +280,27 @@
 				cloneElement[0].className = "";
 				$(cloneElement).removeClass('ripple');
 				$(cloneElement).removeAttr('ripple');
-				$(cloneElement).removeAttr('data-ripple');
-				$(cloneElement).removeAttr('ng-ripple');
-				replacement = $(cloneElement);
+				$(cloneElement).removeAttr('data-ripple')
+				$(cloneElement).removeAttr('ng-ripple')
+				
+				if(overink){
+					replacement = $(cloneElement);
+				}else{
+					markup = $(cloneElement);
+				}
 			}
 
 			markup.addClass('ripple-cont');
 
-			replacement.addClass('ripple-content');
-			replacement.html(content);
+			if(overink){
+				replacement.addClass('ripple-content');
+				replacement.html(content);
 
-			markup.append(replacement);
+				markup.append(replacement);
+			}else{
+				markup.append("<div class='ripple-content'>"+content+"</div>");
+			}
+
 			markup.append("<div class='ink-content'></div>");
 			return markup[0].outerHTML;
 		}
