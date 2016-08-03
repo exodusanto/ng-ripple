@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "^1.4.7"
+    "angular": "^1.4.7",
+    "pointer_events_polyfill": "kmewhort/pointer_events_polyfill"
   }
 }

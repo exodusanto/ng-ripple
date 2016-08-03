@@ -26,7 +26,17 @@
 			var preventInk = false;
 			
 			elem = $(element);
+
+			if(typeof PointerEventsPolyfill !== "undefined"){
+				PointerEventsPolyfill.initialize({
+					'selector': elem,
+					'mouseEvents': ['click','dblclick']
+				});
+			}
+
 			elem.removeClass('ripple');
+			elem.removeAttr('href');
+
 			rippleCont = elem.children(".ink-content");
 			
 			var listenType = {
@@ -252,7 +262,8 @@
 
 		function createMarkup(element){
 			var content = $(element).html();
-			var markup = $("<button></button>");
+			var markup = $("<div></div>");
+			var replacement = $("<button></button>");
 
 			if($(element).prop('nodeName').toLowerCase() != "ripple"){
 				var cloneElement = $(element).clone();
@@ -260,14 +271,17 @@
 				cloneElement[0].className = "";
 				$(cloneElement).removeClass('ripple');
 				$(cloneElement).removeAttr('ripple');
-				$(cloneElement).removeAttr('data-ripple')
-				$(cloneElement).removeAttr('ng-ripple')
-				markup = $(cloneElement);
+				$(cloneElement).removeAttr('data-ripple');
+				$(cloneElement).removeAttr('ng-ripple');
+				replacement = $(cloneElement);
 			}
 
 			markup.addClass('ripple-cont');
 
-			markup.append("<div class='ripple-content'>"+content+"</div>");
+			replacement.addClass('ripple-content');
+			replacement.html(content);
+
+			markup.append(replacement);
 			markup.append("<div class='ink-content'></div>");
 			return markup[0].outerHTML;
 		}
