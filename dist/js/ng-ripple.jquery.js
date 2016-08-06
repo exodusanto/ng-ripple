@@ -68,8 +68,15 @@
 
 			function createRipple(event){
 
-				if(rippleEventArray.indexOf(event.timeStamp) != -1)return;
-				rippleEventArray.push(event.timeStamp);
+				var timeStamp = event.timeStamp;
+
+				if(timeStamp == 0){
+					var date = new Date();
+					timeStamp = date.getTime();
+				}
+
+				if(rippleEventArray.indexOf(timeStamp) != -1)return;
+				rippleEventArray.push(timeStamp);
 
 				var targetInk = $(event.target);
 
