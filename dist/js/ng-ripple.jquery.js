@@ -67,7 +67,7 @@
 
 
 			function createRipple(event){
-
+				var blockedAll = false;
 				var timeStamp = event.timeStamp;
 
 				if(timeStamp == 0){
@@ -83,6 +83,9 @@
 				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
 				if(!!preventInk && elem.is(preventInk))return;
+
+				$(window).bind("stopAllInk", forceRemoveInk);
+				if(blockedAll == true) return; // block all start
 
 				if(!!overInk)rippleCont.css("z-index","3");
 
@@ -119,6 +122,7 @@
 					y = 0;
 				}
 				
+				if(blockedAll == true) return; // block all calc
 
 				//Set max between width and height
 				var bd = Math.max(rippleCont.outerWidth(), rippleCont.outerHeight());
@@ -163,10 +167,11 @@
 				}
 
 				setTimeout(function(){
+					if(blockedAll == true) return; // block all animation
 					inkWrapper.addClass('animate');
 				},1);
 
-				// ink.css({height: d+incr, width: d+incr});
+				if(blockedAll == true) return; // block all opacity
 				ink.css({opacity: inkOpacity});
 
 				
@@ -219,6 +224,8 @@
 				}
 
 				function forceRemoveInk(){
+					blockedAll = true;
+					$(window).unbind('stopAllInk', forceRemoveInk);
 					$(window).unbind('scroll', forceRemoveInk);
 					$(window).unbind(listenType.end+' blur scroll', removeInk);
 					elem.unbind('mouseleave', removeInk);
@@ -231,6 +238,8 @@
 					inkWrapper.remove();
 					if(!!overInk && !rippleCont.find(".ink").length)rippleCont.css("z-index","-1");
 				}
+
+				if(blockedAll == true) return;
 
 				hoverIncrement();
 
