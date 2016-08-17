@@ -59,6 +59,10 @@
 	width: 100%;
 }
 
+.ripple-cont.r-full{
+	width: 100%;
+}
+
 .ripple-cont.r-icon{
 	padding: 8px;
 	line-height: 1;
