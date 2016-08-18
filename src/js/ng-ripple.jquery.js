@@ -75,12 +75,11 @@
 					timeStamp = date.getTime();
 				}
 
+				if($(element).hasClass('r-childprevent')) return $(element).removeClass('r-childprevent');
+				$(element).parents(".ripple-cont").addClass('r-childprevent');
+				
 				if(rippleEventArray.indexOf(timeStamp) != -1)return;
 				rippleEventArray.push(timeStamp);
-
-				if($(element).hasClass('r-childprevent')) return $(element).removeClass('r-childprevent');
-
-				$(element).parents(".ripple-cont").addClass('r-childprevent');
 
 				var targetInk = $(event.target);
 
