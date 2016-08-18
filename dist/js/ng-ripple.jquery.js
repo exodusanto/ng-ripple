@@ -78,6 +78,10 @@
 				if(rippleEventArray.indexOf(timeStamp) != -1)return;
 				rippleEventArray.push(timeStamp);
 
+				if($(element).hasClass('r-childprevent')) return $(element).removeClass('r-childprevent');
+
+				$(element).parents(".ripple-cont").addClass('r-childprevent');
+
 				var targetInk = $(event.target);
 
 				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
