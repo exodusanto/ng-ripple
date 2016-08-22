@@ -41,7 +41,7 @@
 	transition: all .3s;
 }
 
-.ripple-cont:hover{
+.ripple-cont:hover,.ripple-cont.r-int-disabled:active{
 	background-color: rgba(158,158,158,0.2);
 }
 .ripple-cont:active{

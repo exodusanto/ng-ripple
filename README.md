@@ -67,7 +67,7 @@ Add material button with **box-shadow**:
 <ripple r-disabled></ripple>
 ```
 
-or **Disabled hover** and **active**
+or **Disabled active**
 ``` html
 <ripple clas="r-int-disabled"></ripple>
 ```
