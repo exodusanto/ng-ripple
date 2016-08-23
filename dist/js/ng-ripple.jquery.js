@@ -127,26 +127,20 @@
 				
 				if(blockedAll == true) return; // block all calc
 
-				//Set max between width and height
-				var bd = Math.max(rippleCont.outerWidth(), rippleCont.outerHeight());
 				//Set total translate
 				var tr = x + y;
-				//Set diagonal of ink circle
-				var d = bd + tr;
-				//Set default diameter without translate
-				bd -= tr;
 
 				var h = rippleCont.outerHeight();
 				var w = rippleCont.outerWidth();
 
 				//Set diagonal of ripple container
-				var diag = Math.sqrt(w * w + h * h);
+				var d = Math.sqrt(w * w + h * h);
 				//Set incremental diameter of ripple
-				var incrmax = (diag - bd);
+				var incrmax = (d + tr);
 				
 				incrmax = icon ? 0 : incrmax;
 
-				inkWrapper.css({height: d+incr, width: d+incr});
+				inkWrapper.css({height: d, width: d});
 
 				ink.css("opacity",0);
 				
@@ -211,8 +205,8 @@
 					var delay = incr <= incrmax ? rippleConfig.rippleDelay : 1;
 					incr = incr < incrmax ? incrmax : incr;
 					inkWrapper.css({
-							height: d+incr,
-							width: d+incr
+						height: d+incr,
+						width: d+incr
 					});
 					setTimeout(function(){
 						ink.css({

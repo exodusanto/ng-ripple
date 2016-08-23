@@ -92,23 +92,16 @@
 					y = 0;
 				}
 
-				
-				//Set max between width and height
-				var bd = Math.max(rippleCont.offsetWidth, rippleCont.offsetHeight);
 				//Set total translate
 				var tr = x + y;
-				//Set diagonal of ink circle
-				var d = bd + tr;
-				//Set default diameter without translate
-				bd -= tr;
 
 				var h = rippleCont.offsetHeight;
 				var w = rippleCont.offsetWidth;
 
 				//Set diagonal of ripple container
-				var diag = Math.sqrt(w * w + h * h);
+				var d = Math.sqrt(w * w + h * h);
 				//Set incremental diameter of ripple
-				var incrmax = (diag - bd);
+				var incrmax = (d + tr);
 				
 				incrmax = icon ? 0 : incrmax;
 				
