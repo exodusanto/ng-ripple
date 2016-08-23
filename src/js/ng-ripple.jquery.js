@@ -4,7 +4,7 @@
 * Description: Material ripple effects for angularjs
 */
 (function($,exports){
-	var ripple = angular.module('ng-ripple', []);
+	var ripple = angular.module('ngRipple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .2,
 		'rippleDelay': 100,
