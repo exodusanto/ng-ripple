@@ -7,7 +7,7 @@
 	var ripple = angular.module('ngRipple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .2,
-		'rippleDelay': 100,
+		'rippleDelay': 200,
 		'mobileTouch': false
 	});
 
@@ -90,7 +90,7 @@
 				$(window).bind("stopAllInk", forceRemoveInk);
 				if(blockedAll == true) return; // block all start
 
-				if(!!overInk)rippleCont.css("z-index","3");
+				if(!!overInk)rippleCont.show(0);
 
 				var inkWrapper = $("<div class='ink'><i></i></div>");
 				var ink = inkWrapper.find("i");
@@ -215,7 +215,7 @@
 						if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
 						setTimeout(function(){
 							inkWrapper.remove();
-							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.css("z-index","-1");
+							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
 						},550);
 					},delay);
 				}
@@ -233,7 +233,7 @@
 
 					if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
 					inkWrapper.remove();
-					if(!!overInk && !rippleCont.find(".ink").length)rippleCont.css("z-index","-1");
+					if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
 				}
 
 				if(blockedAll == true) return;
@@ -247,7 +247,7 @@
 				}else if(event.type == "click"){
 					setTimeout(function(){
 						removeInk();
-					},200);
+					},300);
 				}else if(event.type == "touchstart"){
 					longTouch = setTimeout(function(){
 						removeInk();
@@ -255,7 +255,7 @@
 					$(window).bind('scroll',forceRemoveInk);
 					scrollTouch = setTimeout(function(){
 						$(window).unbind('scroll',forceRemoveInk);
-					},300);
+					},500);
 					listenerPress();
 				}else{
 					listenerPress();
