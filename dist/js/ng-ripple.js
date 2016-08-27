@@ -93,7 +93,7 @@
 				}
 
 				//Set total translate
-				var tr = x + y;
+				var tr = (x*2) + (y*2);
 
 				var h = rippleCont.offsetHeight;
 				var w = rippleCont.offsetWidth;

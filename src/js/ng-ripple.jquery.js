@@ -7,7 +7,7 @@
 	var ripple = angular.module('ngRipple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .2,
-		'rippleDelay': 200,
+		'rippleDelay': 100,
 		'mobileTouch': false
 	});
 
@@ -128,7 +128,7 @@
 				if(blockedAll == true) return; // block all calc
 
 				//Set total translate
-				var tr = x + y;
+				var tr = (x*2) + (y*2);
 
 				var h = rippleCont.outerHeight();
 				var w = rippleCont.outerWidth();
@@ -136,7 +136,7 @@
 				//Set diagonal of ripple container
 				var d = Math.sqrt(w * w + h * h);
 				//Set incremental diameter of ripple
-				var incrmax = (d + tr);
+				var incrmax = tr;
 				
 				incrmax = icon ? 0 : incrmax;
 

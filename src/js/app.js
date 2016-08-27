@@ -1,10 +1,10 @@
 (function(){
-	var app = angular.module('app', ["ng-ripple"]);
+	var app = angular.module('app', ["ngRipple"]);
 	
 	app.run(['rippleConfig', function(rippleConfig){
 
 		rippleConfig.rippleOpacity = .2;
-		rippleConfig.rippleIncremental = 1.5;
+		rippleConfig.rippleDelay = 0;
 
 		console.info("Configuration:",JSON.stringify(rippleConfig));
 
