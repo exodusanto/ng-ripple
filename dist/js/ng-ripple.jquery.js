@@ -277,6 +277,13 @@
 
 
 		function createMarkup(element){
+			if($(element).hasClass('ripple-cont')){
+				while($(element)[0].attributes.length > 0){
+   					$(element)[0].removeAttribute($(element)[0].attributes[0].name);
+				}
+				return element[0].outerHTML;
+			}
+
 			var content = $(element).html();
 			var markup = $("<button></button>");
 			var overink = element.hasClass('r-overink');
