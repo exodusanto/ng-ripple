@@ -23,7 +23,7 @@
 			var overInk = false;
 			var preventInk = false;
 		
-			removeClass(element,'ripple');
+			addClass(element,'ripple');
 			rippleCont = element[0].querySelectorAll(":scope >.ink-content")[0];
 
 			element.on("$destroy",function(){

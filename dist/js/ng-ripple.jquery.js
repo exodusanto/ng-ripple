@@ -35,7 +35,7 @@
 				});
 			}
 
-			elem.removeClass('ripple');
+			elem.addClass('ripple');
 			
 			if(overInk){
 				elem.removeAttr('href');
