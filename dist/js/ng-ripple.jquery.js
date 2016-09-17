@@ -62,7 +62,7 @@
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
 
-
+			elem.unbind(listenType.start,createRipple);
 			elem.bind(listenType.start,createRipple);
 
 
