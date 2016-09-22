@@ -215,7 +215,7 @@
 						if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
 						setTimeout(function(){
 							inkWrapper.remove();
-							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
+							if(!!overInk && !rippleCont.find(".ink").length)rippleCont.css("display","");
 						},550);
 					},delay);
 				}
@@ -233,7 +233,7 @@
 
 					if(!!inkWrapper.hasClass('new') && !icon)rippleCont.css("background-color","");
 					inkWrapper.remove();
-					if(!!overInk && !rippleCont.find(".ink").length)rippleCont.hide(0);
+					if(!!overInk && !rippleCont.find(".ink").length)rippleCont.css("display","");
 				}
 
 				if(blockedAll == true) return;
