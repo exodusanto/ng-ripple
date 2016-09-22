@@ -298,7 +298,6 @@
 				var cloneElement = $(element).clone();
 				$(cloneElement).empty();
 				cloneElement[0].className = "";
-				$(cloneElement).removeClass('ripple');
 				$(cloneElement).removeAttr('ripple');
 				$(cloneElement).removeAttr('data-ripple')
 				$(cloneElement).removeAttr('ng-ripple')
