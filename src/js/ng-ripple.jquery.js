@@ -49,7 +49,7 @@
 							? 'touchstart'
 							: 'click'
 						: 'mousedown',
-				"end" : ('ontouchend' in document.documentElement) ? 'touchend' : 'mouseup'
+				"end" : ('ontouchend' in document.documentElement) ? 'touchend' : 'mouseup dragend'
 			};
 
 			element.on("$destroy",function(){
