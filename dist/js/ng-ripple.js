@@ -68,7 +68,9 @@
 
 				if(typeof attributes.rDisabled != "undefined" || hasClass(element,'disabled'))return;
 				if(hasClass(targetInk,'r-noink') || !!parents(targetInk,'r-noink').length)return;
-				if(!!preventInk && elem.is(preventInk))return;
+				if(!!preventInk && isElement(element[0],preventInk))return;
+
+				addListenerMulti(window,'stopAllInk',forceRemoveInk);
 
 				if(!!overInk)rippleCont.style.display = "block";
 
@@ -234,6 +236,19 @@
 			}
 		}
 
+		function isElement(elm,sel){
+			var elements = document.querySelectorAll(sel);
+			var found = false;
+
+			elements.forEach(function(el,item){
+				if(elm === el){
+					found = true;
+				}
+			});
+
+			return found;
+		}
+
 		function parents(el,cl){
 			var parents = [];
 			var p = el[0].parentElement;
@@ -353,10 +368,11 @@
 			if(element.prop('nodeName').toLowerCase() != "ripple"){
 				var cloneElement = element[0].cloneNode(true);
 				cloneElement.innerHTML = '';
-				cloneElement.className = cloneElement.className.replace(/\b(ripple)(\s)*\b/,'');
+				cloneElement.className = '';
 
 				cloneElement.removeAttribute("ripple");
 				cloneElement.removeAttribute("data-ripple");
+				cloneElement.removeAttribute("ng-ripple");
 				
 				if(overink){
 					replacement = cloneElement;
@@ -369,9 +385,9 @@
 
 			if(overink){
 				addClass(replacement,'ripple-content');
-				replacement.innerHTML(content);
+				replacement.innerHTML = content;
 
-				markup.innerHTML += replacement;
+				markup.innerHTML = replacement.outerHTML;
 			}else{
 				markup.innerHTML += "<div class='ripple-content'>"+content+"</div>";
 			}

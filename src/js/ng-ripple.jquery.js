@@ -195,6 +195,8 @@
 				}
 
 				function removeInk(){
+					$(window).unbind('stopAllInk', forceRemoveInk);
+					$(window).unbind('scroll', forceRemoveInk);
 					$(window).unbind(listenType.end+' blur', removeInk);
 					elem.unbind('mouseleave', removeInk);
 
