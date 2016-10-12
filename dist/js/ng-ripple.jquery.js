@@ -175,7 +175,7 @@
 				var inkGrow = null;
 
 				function hoverIncrement(){
-					var incrStep = ((incrmax - incr)/100)*10
+					var incrStep = ((incrmax - incr)/100)*10;
 					inkGrow = setInterval(function(){
 						if(incr < incrmax){
 							incr += incrStep;

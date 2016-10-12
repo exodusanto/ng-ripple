@@ -7,7 +7,8 @@
 	var ripple = angular.module('ngRipple', []);
 	ripple.constant('rippleConfig',{
 		'rippleOpacity': .2,
-		'rippleDelay': 100
+		'rippleDelay': 100,
+		'mobileTouch': false
 	});
 
 	ripple.directive('ripple',['rippleConfig', function(rippleConfig){
@@ -22,9 +23,25 @@
 			var icon = false;
 			var overInk = false;
 			var preventInk = false;
+
+			if(typeof PointerEventsPolyfill !== "undefined"){
+				PointerEventsPolyfill.initialize({
+					'selector': element,
+					'mouseEvents': ['click','dblclick']
+				});
+			}
 		
 			addClass(element,'ripple');
 			rippleCont = element[0].querySelectorAll(":scope >.ink-content")[0];
+			
+			var listenType = {
+				"start" : ('ontouchstart' in document.documentElement) 
+						? !!rippleConfig.mobileTouch 
+							? 'touchstart'
+							: 'click'
+						: 'mousedown',
+				"end" : ('ontouchend' in document.documentElement) ? 'touchend' : 'mouseup dragend'
+			};
 
 			element.on("$destroy",function(){
 				removeListenerMulti(element[0],"mousedown touchstart",createRipple);
@@ -101,12 +118,12 @@
 				//Set diagonal of ripple container
 				var d = Math.sqrt(w * w + h * h);
 				//Set incremental diameter of ripple
-				var incrmax = (d + tr);
+				var incrmax = tr;
 				
 				incrmax = icon ? 0 : incrmax;
 				
-				inkWrapper.style.height = d+incr+"px";
-				inkWrapper.style.width = d+incr+"px";
+				inkWrapper.style.height = d+"px";
+				inkWrapper.style.width = d+"px";
 
 				var inkOpacity = customOpacity || rippleConfig.rippleOpacity;
 				
@@ -133,14 +150,13 @@
 					addClass(inkWrapper,'animate');
 				},1);
 
-				incr = icon ? rippleConfig.rippleIncremental/2 : rippleConfig.rippleIncremental;
-
 				ink.style.opacity = inkOpacity;
 				
 				var inkGrow = null;
 
 				function hoverIncrement(){
-					var incrStep = ((incrmax - incr)/100)*10
+					var incrStep = ((incrmax - incr)/100)*10;
+
 					inkGrow = setInterval(function(){
 						if(incr < incrmax){
 							incr += incrStep;
@@ -158,8 +174,8 @@
 				}
 				
 				function removeInk(){
-					removeListenerMulti(window,'mouseup mouseleave touchend',removeInk);
-					removeListenerMulti(element[0],'mouseleave',removeInk);
+					removeListenerMulti(window,listenType.end+' blur', removeInk);
+					removeListenerMulti(element[0],'mouseleave', removeInk);
 
 					clearInterval(inkGrow);
 
@@ -172,13 +188,49 @@
 						if(!!new RegExp('new').test(inkWrapper.className) && !icon)rippleCont.style.backgroundColor = "";
 						setTimeout(function(){
 							inkWrapper.remove();
-							if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "none";
+							if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "";
 						},550);
 					},delay);
 				}
 
+				function forceRemoveInk(){
+					blockedAll = true;
+					removeListenerMulti(window,'stopAllInk', forceRemoveInk);
+					removeListenerMulti(window,'scroll', forceRemoveInk);
+					removeListenerMulti(window,listenType.end+' blur scroll', removeInk);
+					removeListenerMulti(element[0],'mouseleave', removeInk);
+
+					clearInterval(inkGrow);
+					clearInterval(longTouch);
+					clearInterval(scrollTouch);
+
+					if(!!new RegExp('new').test(inkWrapper.className) && !icon)rippleCont.style.backgroundColor = "";
+					inkWrapper.remove();
+					if(!!overInk && !rippleCont.querySelectorAll(".ink").length)rippleCont.style.display = "";
+				}
+
 				hoverIncrement();
-				listenerPress();
+
+				if(event.type == "mousedown" && event.which !== 1){
+					setTimeout(function(){
+						removeInk();
+					},100);
+				}else if(event.type == "click"){
+					setTimeout(function(){
+						removeInk();
+					},300);
+				}else if(event.type == "touchstart"){
+					longTouch = setTimeout(function(){
+						removeInk();
+					},1000);
+					addListenerMulti(window,'scroll',forceRemoveInk);
+					scrollTouch = setTimeout(function(){
+						removeListenerMulti(window,'scroll',forceRemoveInk);
+					},500);
+					listenerPress();
+				}else{
+					listenerPress();
+				}
 			}
 		}
 
@@ -282,8 +334,22 @@
 		}
 
 		function createMarkup(element){
+			if(hasClass(element,'ripple-cont')){
+				while(element[0].attributes.length > 0){
+   					element[0].removeAttribute(element[0].attributes[0].name);
+				}
+				return element[0].outerHTML;
+			}
+
 			var content = element[0].innerHTML;
 			var markup = document.createElement("button");
+			var overink = hasClass(element,'r-overink');
+
+			if(overink){
+				markup = document.createElement("div");
+				var replacement = document.createElement("button");
+			}
+
 			if(element.prop('nodeName').toLowerCase() != "ripple"){
 				var cloneElement = element[0].cloneNode(true);
 				cloneElement.innerHTML = '';
@@ -291,13 +357,25 @@
 
 				cloneElement.removeAttribute("ripple");
 				cloneElement.removeAttribute("data-ripple");
-
-				markup = cloneElement;
+				
+				if(overink){
+					replacement = cloneElement;
+				}else{
+					markup = cloneElement;
+				}
 			}
 
 			addClass(markup,'ripple-cont');
 
-			markup.innerHTML += "<div class='ripple-content'>"+content+"</div>";
+			if(overink){
+				addClass(replacement,'ripple-content');
+				replacement.innerHTML(content);
+
+				markup.innerHTML += replacement;
+			}else{
+				markup.innerHTML += "<div class='ripple-content'>"+content+"</div>";
+			}
+
 			markup.innerHTML += "<div class='ink-content'></div>";
 			
 			return markup.outerHTML;
