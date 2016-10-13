@@ -4,7 +4,7 @@ Material ripple effects directive for AngularJS,
 Inspired by **Angular Material Design** , 
 this implementation contains the ripple animation for buttons and links
 ### Version
-0.9.6
+1.0.0
 
 ### Dependencies
  - AngularJs
@@ -130,6 +130,10 @@ For all element
 This is the delay of exit animation of ink
 
 ## Changelog
+Version 1.0.0:
+
+Fix standalone, recreate ripple effects
+
 Version 0.9.6:
 
 Fix for Safari and Chrome 51 (Animation Bug)

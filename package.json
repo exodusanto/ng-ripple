@@ -1,6 +1,6 @@
 {
   "name": "ng-ripple",
-  "version": "0.9.6",
+  "version": "1.0.0",
   "description": "Ripple effects for angular",
   "main": "dist/js/ng-ripple.js",
   "repository": {
