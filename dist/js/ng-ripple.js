@@ -59,10 +59,19 @@
 
 			function createRipple(event){
 				
-				event.preventDefault();
+				var timeStamp = event.timeStamp;
 
-				if(rippleEventArray.indexOf(event.timeStamp) != -1)return;
-				rippleEventArray.push(event.timeStamp);
+				if(timeStamp == 0){
+					var date = new Date();
+					timeStamp = date.getTime();
+				}
+
+
+				if(hasClass(element,'r-childprevent')) return removeClass(element,'r-childprevent');
+				addClass(parents(element,"ripple-cont"),'r-childprevent');
+				
+				if(rippleEventArray.indexOf(timeStamp) != -1)return;
+				rippleEventArray.push(timeStamp);
 				
 				var targetInk = $(event.target);
 
@@ -79,6 +88,8 @@
 				var ink = "<i></i>";
 				var incr = 0;
 				var incrmax = 0;
+				var longTouch = null;
+				var scrollTouch = null;
 
 				inkWrapper.innerHTML = ink;
 				ink = inkWrapper.querySelectorAll(":scope > i")[0];
@@ -176,6 +187,8 @@
 				}
 				
 				function removeInk(){
+					removeListenerMulti(window,'stopAllInk', forceRemoveInk);
+					removeListenerMulti(window,'scroll', forceRemoveInk);
 					removeListenerMulti(window,listenType.end+' blur', removeInk);
 					removeListenerMulti(element[0],'mouseleave', removeInk);
 
@@ -196,7 +209,6 @@
 				}
 
 				function forceRemoveInk(){
-					blockedAll = true;
 					removeListenerMulti(window,'stopAllInk', forceRemoveInk);
 					removeListenerMulti(window,'scroll', forceRemoveInk);
 					removeListenerMulti(window,listenType.end+' blur scroll', removeInk);
@@ -325,6 +337,7 @@
 		function addListenerMulti(el, s, fn) {
 		  var evts = s.split(' ');
 		  for (var i=0, iLen=evts.length; i<iLen; i++) {
+		  	console.log(evts[i]);
 		    el.addEventListener(evts[i], fn, false);
 		  }
 		}
