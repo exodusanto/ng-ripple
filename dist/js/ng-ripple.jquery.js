@@ -24,6 +24,8 @@
 			var icon = false;
 			var overInk = false;
 			var preventInk = false;
+			var enableClick = false;
+			var mobiledevice = ('ontouchstart' in document.documentElement);
 			
 			elem = $(element);
 			overInk = elem.hasClass('r-overink');
@@ -42,13 +44,17 @@
 			}
 
 			rippleCont = elem.children(".ink-content");
+
+			enableClick = elem.find(".r-noink-hover").length > 0;
 			
 			var listenType = {
 				"start" : ('ontouchstart' in document.documentElement) 
 						? !!rippleConfig.mobileTouch 
 							? 'touchstart'
 							: 'click'
-						: 'mousedown',
+						: !!enableClick 
+							? 'mousedown click'
+							: 'mousedown',
 				"end" : ('ontouchend' in document.documentElement) ? 'touchend' : 'mouseup dragend'
 			};
 
@@ -85,9 +91,12 @@
 
 				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
+				if(event.type == "mousedown" && (targetInk.hasClass('r-noink-hover') || !!targetInk.parents('.r-noink-hover').length))return;
+				if(event.type == "click" && !mobiledevice && !targetInk.hasClass('r-noink-hover') && !targetInk.parents('.r-noink-hover').length)return;
 				if(!!preventInk && elem.is(preventInk))return;
 
 				$(window).bind("stopAllInk", forceRemoveInk);
+				$(window).bind("explodeAllInk", removeInk);
 				if(blockedAll == true) return; // block all start
 
 				if(!!overInk)rippleCont.show(0);
@@ -197,6 +206,7 @@
 				function removeInk(){
 					$(window).unbind('stopAllInk', forceRemoveInk);
 					$(window).unbind('scroll', forceRemoveInk);
+					$(window).unbind('explodeAllInk', removeInk);
 					$(window).unbind(listenType.end+' blur', removeInk);
 					elem.unbind('mouseleave', removeInk);
 
@@ -226,6 +236,7 @@
 					blockedAll = true;
 					$(window).unbind('stopAllInk', forceRemoveInk);
 					$(window).unbind('scroll', forceRemoveInk);
+					$(window).unbind('explodeAllInk', removeInk);
 					$(window).unbind(listenType.end+' blur scroll', removeInk);
 					elem.unbind('mouseleave', removeInk);
 
@@ -249,7 +260,7 @@
 				}else if(event.type == "click"){
 					setTimeout(function(){
 						removeInk();
-					},300);
+					},80);
 				}else if(event.type == "touchstart"){
 					longTouch = setTimeout(function(){
 						removeInk();
