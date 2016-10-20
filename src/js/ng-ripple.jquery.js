@@ -69,7 +69,7 @@
 			elem.unbind(listenType.start,createRipple);
 			elem.bind(listenType.start,createRipple);
 
-			if(!!enableClick){
+			if(!!enableClick && (!mobiledevice || !!rippleConfig.mobileTouch)){
 				elem.find(".r-noink-hover").unbind("click",createRipple);
 				elem.find(".r-noink-hover").bind("click",createRipple);
 			}
@@ -94,7 +94,7 @@
 
 				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
-				if(event.type == "mousedown" && (targetInk.hasClass('r-noink-hover') || !!targetInk.parents('.r-noink-hover').length))return;
+				if((event.type == "mousedown" || event.type == "touchstart") && (targetInk.hasClass('r-noink-hover') || !!targetInk.parents('.r-noink-hover').length))return;
 				if(event.type == "click" && !mobiledevice && !targetInk.hasClass('r-noink-hover') && !targetInk.parents('.r-noink-hover').length)return;
 				if(!!preventInk && elem.is(preventInk))return;
 
