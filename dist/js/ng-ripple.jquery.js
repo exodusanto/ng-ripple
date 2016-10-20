@@ -52,9 +52,7 @@
 						? !!rippleConfig.mobileTouch 
 							? 'touchstart'
 							: 'click'
-						: !!enableClick 
-							? 'mousedown click'
-							: 'mousedown',
+						: 'mousedown',
 				"end" : ('ontouchend' in document.documentElement) ? 'touchend' : 'mouseup dragend'
 			};
 
@@ -70,6 +68,11 @@
 
 			elem.unbind(listenType.start,createRipple);
 			elem.bind(listenType.start,createRipple);
+
+			if(!!enableClick){
+				elem.find(".r-noink-hover").unbind("click",createRipple);
+				elem.find(".r-noink-hover").bind("click",createRipple);
+			}
 
 
 			function createRipple(event){
@@ -260,7 +263,7 @@
 				}else if(event.type == "click"){
 					setTimeout(function(){
 						removeInk();
-					},80);
+					},100);
 				}else if(event.type == "touchstart"){
 					longTouch = setTimeout(function(){
 						removeInk();
