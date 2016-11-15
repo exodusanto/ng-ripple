@@ -17,7 +17,6 @@
 
 		function rippleInit(scope,element,attributes){
 			var elem = null;
-			var rippleCont = null;
 			var inkLight = false;
 			var inkColor = false;
 			var customOpacity = null;
@@ -42,8 +41,6 @@
 			if(overInk){
 				elem.removeAttr('href');
 			}
-
-			rippleCont = elem.children(".ink-content");
 
 			enableClick = elem.find(".r-noink-hover").length > 0;
 			
@@ -79,13 +76,16 @@
 				var blockedAll = false;
 				var timeStamp = event.timeStamp;
 
-				if(timeStamp == 0){
-					var date = new Date();
-					timeStamp = date.getTime();
-				}
+                if(timeStamp == 0){
+                    var date = new Date();
+                    timeStamp = date.getTime();
+                }
 
-				if($(element).hasClass('r-childprevent')) return $(element).removeClass('r-childprevent');
-				$(element).parents(".ripple-cont").addClass('r-childprevent');
+                var elem = event.currentTarget;
+                var rippleCont = $(elem).children(".ink-content");
+
+				if($(elem).hasClass('r-childprevent')) return $(elem).removeClass('r-childprevent');
+				$(elem).parents(".ripple-cont").addClass('r-childprevent');
 				
 				if(rippleEventArray.indexOf(timeStamp) != -1)return;
 				rippleEventArray.push(timeStamp);
