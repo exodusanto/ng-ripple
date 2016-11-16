@@ -81,7 +81,7 @@
                     timeStamp = date.getTime();
                 }
 
-                var elem = event.currentTarget;
+                var elem = $(event.currentTarget);
                 var rippleCont = $(elem).children(".ink-content");
 
 				if($(elem).hasClass('r-childprevent')) return $(elem).removeClass('r-childprevent');
@@ -92,11 +92,11 @@
 
 				var targetInk = $(event.target);
 
-				if(typeof attributes.rDisabled != "undefined" || elem.hasClass('disabled'))return;
+				if(typeof attributes.rDisabled != "undefined" || $(elem).hasClass('disabled'))return;
 				if(targetInk.hasClass('r-noink') || !!targetInk.parents('.r-noink').length)return;
 				if((event.type == "mousedown" || event.type == "touchstart") && (targetInk.hasClass('r-noink-hover') || !!targetInk.parents('.r-noink-hover').length))return;
 				if(event.type == "click" && !mobiledevice && !targetInk.hasClass('r-noink-hover') && !targetInk.parents('.r-noink-hover').length)return;
-				if(!!preventInk && elem.is(preventInk))return;
+				if(!!preventInk && $(elem).is(preventInk))return;
 
 				$(window).bind("stopAllInk", forceRemoveInk);
 				$(window).bind("explodeAllInk", removeInk);
@@ -203,7 +203,7 @@
 				
 				function listenerPress(){
 					$(window).bind(listenType.end+' blur', removeInk);
-					elem.bind('mouseleave',removeInk);
+					$(elem).bind('mouseleave',removeInk);
 				}
 
 				function removeInk(){
@@ -211,7 +211,7 @@
 					$(window).unbind('scroll', forceRemoveInk);
 					$(window).unbind('explodeAllInk', removeInk);
 					$(window).unbind(listenType.end+' blur', removeInk);
-					elem.unbind('mouseleave', removeInk);
+					$(elem).unbind('mouseleave', removeInk);
 
 					clearInterval(inkGrow);
 					clearInterval(longTouch);
