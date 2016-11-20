@@ -81,8 +81,8 @@
                     timeStamp = date.getTime();
                 }
 
-                var elem = $(event.currentTarget);
-                var rippleCont = $(elem).children(".ink-content");
+                var elem = $(event.currentTarget).closest('.ripple-cont');
+                var rippleCont = elem.children(".ink-content");
 
 				if($(elem).hasClass('r-childprevent')) return $(elem).removeClass('r-childprevent');
 				$(elem).parents(".ripple-cont").addClass('r-childprevent');
