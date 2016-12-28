@@ -23,6 +23,8 @@
 			var icon = false;
 			var overInk = false;
 			var preventInk = false;
+			var enableClick = false;
+			var mobiledevice = ('ontouchstart' in document.documentElement);
 
 			if(typeof PointerEventsPolyfill !== "undefined"){
 				PointerEventsPolyfill.initialize({
@@ -32,8 +34,9 @@
 			}
 		
 			addClass(element,'ripple');
-			rippleCont = element[0].querySelectorAll(":scope >.ink-content")[0];
 			
+			enableClick = element[0].querySelectorAll(".r-noink-hover").length > 0;
+
 			var listenType = {
 				"start" : ('ontouchstart' in document.documentElement) 
 						? !!rippleConfig.mobileTouch 
@@ -47,15 +50,22 @@
 				removeListenerMulti(element[0],"mousedown touchstart",createRipple);
 			});
 
-			icon = hasClass(element,'r-icon');
-			overInk = hasClass(element,'r-overink');
+			icon = hasClass(element[0],'r-icon');
+			overInk = hasClass(element[0],'r-overink');
 			inkLight = typeof attributes.rLight !== "undefined";
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
 
-			addListenerMulti(element[0],"mousedown touchstart",createRipple);
+			removeListenerMulti(element[0],listenType.start,createRipple);
+			addListenerMulti(element[0],listenType.start,createRipple);
 
+			if(!!enableClick && (!mobiledevice || !!rippleConfig.mobileTouch)){
+				[].forEach.call(element[0].querySelectorAll(".r-noink-hover"),function(el){
+					removeListenerMulti(el,"click",createRipple);
+						addListenerMulti(el,"click",createRipple);
+				});
+			}
 
 			function createRipple(event){
 				
@@ -66,18 +76,22 @@
 					timeStamp = date.getTime();
 				}
 
+                var elem = event.currentTarget.closest('.ripple-cont');
+                var rippleCont = elem.querySelector(":scope > .ink-content");
 
-				if(hasClass(element,'r-childprevent')) return removeClass(element,'r-childprevent');
-				addClass(parents(element,"ripple-cont"),'r-childprevent');
+				if(hasClass(elem,'r-childprevent')) return removeClass(elem,'r-childprevent');
+				addClass(parents(elem,"ripple-cont"),'r-childprevent');
 				
 				if(rippleEventArray.indexOf(timeStamp) != -1)return;
 				rippleEventArray.push(timeStamp);
 				
-				var targetInk = $(event.target);
+				var targetInk = event.target;
 
-				if(typeof attributes.rDisabled != "undefined" || hasClass(element,'disabled'))return;
+				if(typeof attributes.rDisabled != "undefined" || hasClass(elem,'disabled'))return;
 				if(hasClass(targetInk,'r-noink') || !!parents(targetInk,'r-noink').length)return;
-				if(!!preventInk && isElement(element[0],preventInk))return;
+				if((event.type == "mousedown" || event.type == "touchstart") && (hasClass(targetInk,'r-noink-hover') || !!parents(targetInk,'r-noink-hover').length))return;
+				if(event.type == "click" && !mobiledevice && !hasClass(targetInk,'r-noink-hover') && !parents(targetInk,'.r-noink-hover').length)return;
+				if(!!preventInk && isElement(elem,preventInk))return;
 
 				addListenerMulti(window,'stopAllInk',forceRemoveInk);
 
@@ -183,14 +197,14 @@
 
 				function listenerPress(){
 					addListenerMulti(window,'mouseup blur touchend',removeInk);
-					addListenerMulti(element[0],'mouseleave',removeInk);
+					addListenerMulti(elem,'mouseleave',removeInk);
 				}
 				
 				function removeInk(){
 					removeListenerMulti(window,'stopAllInk', forceRemoveInk);
 					removeListenerMulti(window,'scroll', forceRemoveInk);
 					removeListenerMulti(window,listenType.end+' blur', removeInk);
-					removeListenerMulti(element[0],'mouseleave', removeInk);
+					removeListenerMulti(elem,'mouseleave', removeInk);
 
 					clearInterval(inkGrow);
 
@@ -212,7 +226,7 @@
 					removeListenerMulti(window,'stopAllInk', forceRemoveInk);
 					removeListenerMulti(window,'scroll', forceRemoveInk);
 					removeListenerMulti(window,listenType.end+' blur scroll', removeInk);
-					removeListenerMulti(element[0],'mouseleave', removeInk);
+					removeListenerMulti(elem,'mouseleave', removeInk);
 
 					clearInterval(inkGrow);
 					clearInterval(longTouch);
@@ -263,7 +277,7 @@
 
 		function parents(el,cl){
 			var parents = [];
-			var p = el[0].parentElement;
+			var p = el.parentElement;
 
 			while(p !== null){
 				var o = p;
@@ -318,10 +332,10 @@
 		}
 
 		function hasClass(e,name){
-			if (e[0].classList){
-			  return e[0].classList.contains(name);
+			if (e.classList){
+			  return e.classList.contains(name);
 			}else{
-			  return new RegExp('(^| )' + name + '( |$)', 'gi').test(e[0].className);
+			  return new RegExp('(^| )' + name + '( |$)', 'gi').test(e.className);
 			}
 		}
 
@@ -337,7 +351,6 @@
 		function addListenerMulti(el, s, fn) {
 		  var evts = s.split(' ');
 		  for (var i=0, iLen=evts.length; i<iLen; i++) {
-		  	console.log(evts[i]);
 		    el.addEventListener(evts[i], fn, false);
 		  }
 		}
@@ -362,7 +375,7 @@
 		}
 
 		function createMarkup(element){
-			if(hasClass(element,'ripple-cont')){
+			if(hasClass(element[0],'ripple-cont')){
 				while(element[0].attributes.length > 0){
    					element[0].removeAttribute(element[0].attributes[0].name);
 				}
@@ -371,7 +384,7 @@
 
 			var content = element[0].innerHTML;
 			var markup = document.createElement("button");
-			var overink = hasClass(element,'r-overink');
+			var overink = hasClass(element[0],'r-overink');
 
 			if(overink){
 				markup = document.createElement("div");
