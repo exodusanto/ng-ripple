@@ -54,7 +54,7 @@
 			};
 
 			element.on("$destroy",function(){
-				elem.unbind(listenType.start,createRipple);
+				elem.off(listenType.start,createRipple);
 			});
 
 			icon = elem.hasClass('r-icon');
@@ -63,12 +63,12 @@
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
 
-			elem.unbind(listenType.start,createRipple);
-			elem.bind(listenType.start,createRipple);
+			elem.off(listenType.start,createRipple);
+			elem.on(listenType.start,createRipple);
 
 			if(!!enableClick && (!mobiledevice || !!rippleConfig.mobileTouch)){
-				elem.find(".r-noink-hover").unbind("click",createRipple);
-				elem.find(".r-noink-hover").bind("click",createRipple);
+				elem.find(".r-noink-hover").off("click",createRipple);
+				elem.find(".r-noink-hover").on("click",createRipple);
 			}
 
 
@@ -98,8 +98,8 @@
 				if(event.type == "click" && !mobiledevice && !targetInk.hasClass('r-noink-hover') && !targetInk.parents('.r-noink-hover').length)return;
 				if(!!preventInk && $(elem).is(preventInk))return;
 
-				$(window).bind("stopAllInk", forceRemoveInk);
-				$(window).bind("explodeAllInk", removeInk);
+				$(window).on("stopAllInk", forceRemoveInk);
+				$(window).on("explodeAllInk", removeInk);
 				if(blockedAll == true) return; // block all start
 
 				if(!!overInk)rippleCont.show(0);
@@ -202,16 +202,16 @@
 				}
 				
 				function listenerPress(){
-					$(window).bind(listenType.end+' blur', removeInk);
-					$(elem).bind('mouseleave',removeInk);
+					$(window).on(listenType.end+' blur', removeInk);
+					$(elem).on('mouseleave',removeInk);
 				}
 
 				function removeInk(){
-					$(window).unbind('stopAllInk', forceRemoveInk);
-					$(window).unbind('scroll', forceRemoveInk);
-					$(window).unbind('explodeAllInk', removeInk);
-					$(window).unbind(listenType.end+' blur', removeInk);
-					$(elem).unbind('mouseleave', removeInk);
+					$(window).off('stopAllInk', forceRemoveInk);
+					$(window).off('scroll', forceRemoveInk);
+					$(window).off('explodeAllInk', removeInk);
+					$(window).off(listenType.end+' blur', removeInk);
+					$(elem).off('mouseleave', removeInk);
 
 					clearInterval(inkGrow);
 					clearInterval(longTouch);
@@ -237,11 +237,11 @@
 
 				function forceRemoveInk(){
 					blockedAll = true;
-					$(window).unbind('stopAllInk', forceRemoveInk);
-					$(window).unbind('scroll', forceRemoveInk);
-					$(window).unbind('explodeAllInk', removeInk);
-					$(window).unbind(listenType.end+' blur scroll', removeInk);
-					elem.unbind('mouseleave', removeInk);
+					$(window).off('stopAllInk', forceRemoveInk);
+					$(window).off('scroll', forceRemoveInk);
+					$(window).off('explodeAllInk', removeInk);
+					$(window).off(listenType.end+' blur scroll', removeInk);
+					elem.off('mouseleave', removeInk);
 
 					clearInterval(inkGrow);
 					clearInterval(longTouch);
@@ -268,9 +268,9 @@
 					longTouch = setTimeout(function(){
 						removeInk();
 					},1000);
-					$(window).bind('scroll',forceRemoveInk);
+					$(window).on('scroll',forceRemoveInk);
 					scrollTouch = setTimeout(function(){
-						$(window).unbind('scroll',forceRemoveInk);
+						$(window).off('scroll',forceRemoveInk);
 					},500);
 					listenerPress();
 				}else{
