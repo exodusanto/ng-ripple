@@ -24,6 +24,8 @@
 			var overInk = false;
 			var preventInk = false;
 			var preventInkDeep = false;
+			var preventInkParent = false;
+			var preventInkParentDeep = 1;
 			var enableClick = false;
 			var mobiledevice = ('ontouchstart' in document.documentElement);
 			
@@ -63,7 +65,9 @@
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
-			preventInk = typeof attributes.rPreventDeep !== "undefined" ? attributes.rPreventDeep : false;
+			rPreventDeep = typeof attributes.rPreventDeep !== "undefined" ? attributes.rPreventDeep : false;
+			preventInkParent = typeof attributes.rPreventParent !== "undefined" ? attributes.rPreventParent : false;
+			preventInkParentDeep = typeof attributes.rPreventParentDeep !== "undefined" ? attributes.rPreventParentDeep : 1;
 
 			elem.off(listenType.start,createRipple);
 			elem.on(listenType.start,createRipple);
@@ -73,6 +77,15 @@
 				elem.find(".r-noink-hover").on("click",createRipple);
 			}
 
+
+			function parentDeep(el,deep){
+				if(deep == 0) return false;
+				if($(el).parent().is(preventInkParent)){
+					return true;
+				}else{
+					return parentDeep(el,deep-1);
+				}
+			}
 
 			function createRipple(event){
 				var blockedAll = false;
@@ -100,6 +113,7 @@
 				if(event.type == "click" && !mobiledevice && !targetInk.hasClass('r-noink-hover') && !targetInk.parents('.r-noink-hover').length)return;
 				if(!!preventInk && $(elem).is(preventInk))return;
 				if(!!preventInkDeep && ($(elem).is(preventInkDeep) || $(elem).find(preventInkDeep).length != 0))return;
+				if(!!preventInkParent && parentDeep(elem,preventInkParentDeep))return;
 
 				$(window).on("stopAllInk", forceRemoveInk);
 				$(window).on("explodeAllInk", removeInk);
