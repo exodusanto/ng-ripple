@@ -23,6 +23,7 @@
 			var icon = false;
 			var overInk = false;
 			var preventInk = false;
+			var preventInkDeep = false;
 			var enableClick = false;
 			var mobiledevice = ('ontouchstart' in document.documentElement);
 			
@@ -62,6 +63,7 @@
 			inkColor = typeof attributes.rColor !== "undefined" ? attributes.rColor : false;
 			customOpacity = typeof attributes.rOpacity !== "undefined" ? attributes.rOpacity : null;
 			preventInk = typeof attributes.rPrevent !== "undefined" ? attributes.rPrevent : false;
+			preventInk = typeof attributes.rPreventDeep !== "undefined" ? attributes.rPreventDeep : false;
 
 			elem.off(listenType.start,createRipple);
 			elem.on(listenType.start,createRipple);
@@ -97,6 +99,7 @@
 				if((event.type == "mousedown" || event.type == "touchstart") && (targetInk.hasClass('r-noink-hover') || !!targetInk.parents('.r-noink-hover').length))return;
 				if(event.type == "click" && !mobiledevice && !targetInk.hasClass('r-noink-hover') && !targetInk.parents('.r-noink-hover').length)return;
 				if(!!preventInk && $(elem).is(preventInk))return;
+				if(!!preventInkDeep && ($(elem).is(preventInkDeep) || $(elem).find(preventInkDeep).length != 0))return;
 
 				$(window).on("stopAllInk", forceRemoveInk);
 				$(window).on("explodeAllInk", removeInk);
