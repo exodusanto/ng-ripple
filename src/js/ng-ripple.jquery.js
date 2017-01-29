@@ -77,13 +77,12 @@
 				elem.find(".r-noink-hover").on("click",createRipple);
 			}
 
-
 			function parentDeep(el,deep){
 				if(deep == 0) return false;
 				if($(el).parent().is(preventInkParent)){
 					return true;
 				}else{
-					return parentDeep(el,deep-1);
+					return parentDeep($(el).parent(),deep-1);
 				}
 			}
 
