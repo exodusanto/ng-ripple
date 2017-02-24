@@ -398,7 +398,12 @@
 
 				cloneElement.removeAttribute("ripple");
 				cloneElement.removeAttribute("data-ripple");
-				cloneElement.removeAttribute("ng-ripple");
+
+				[].forEach.call(cloneElement.attributes,function(attribute){
+					if(attribute.name.match(/^ng-*/)){
+						cloneElement.removeAttribute(attribute.name);
+					}
+				});
 				
 				if(overink){
 					replacement = cloneElement;
