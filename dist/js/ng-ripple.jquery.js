@@ -328,16 +328,22 @@
 
 			if($(element).prop('nodeName').toLowerCase() != "ripple"){
 				var cloneElement = $(element).clone();
-				$(cloneElement).empty();
-				cloneElement[0].className = "";
-				$(cloneElement).removeAttr('ripple');
-				$(cloneElement).removeAttr('data-ripple')
-				$(cloneElement).removeAttr('ng-ripple')
+				cloneElement = $(cloneElement);
+				cloneElement.empty();
+				cloneElement.prop('className', "");
+				cloneElement.removeAttr('ripple');
+				cloneElement.removeAttr('data-ripple');
+
+				$.each(cloneElement.prop('attributes'),function(index,attribute){
+					if(attribute.name.match(/^ng-*/)){
+						cloneElement.removeAttr(attribute.name);
+					}
+				});
 				
 				if(overink){
-					replacement = $(cloneElement);
+					replacement = cloneElement;
 				}else{
-					markup = $(cloneElement);
+					markup = cloneElement;
 				}
 			}
 
