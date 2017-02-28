@@ -1,6 +1,6 @@
 {
   "name": "ng-ripple",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Ripple effects for angular",
   "main": "dist/js/ng-ripple.js",
   "repository": {
@@ -11,13 +11,15 @@
     "angular",
     "ripple",
     "material button",
-    "matrial effects"
+    "material effects"
   ],
   "author": "Antonio Dal Sie",
   "readmeFilename": "README.md",
   "license": "ISC",
+  "dependencies": {
+    "angular": "^1.4.7"
+  },
   "devDependencies": {
-    "angular": "^1.4.7",
     "bower": "^1.7.9",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
